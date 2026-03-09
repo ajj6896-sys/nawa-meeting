@@ -1,169 +1,104 @@
-import React, { useState, useEffect } from "react";
-
-const STORAGE_KEY = "nawa-records";
-
-function today() {
-  const d = new Date();
-  return d.toISOString().slice(0, 10);
-}
+import { useState, useEffect } from "react";
 
 export default function App() {
   const [records, setRecords] = useState({});
-  const [currentDate, setCurrentDate] = useState(today());
+  const [selectedDate, setSelectedDate] = useState("");
   const [text, setText] = useState("");
-  const [message, setMessage] = useState("");
 
   useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      setRecords(JSON.parse(saved));
-    }
+    const saved = localStorage.getItem("records");
+    if (saved) setRecords(JSON.parse(saved));
   }, []);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+    localStorage.setItem("records", JSON.stringify(records));
   }, [records]);
 
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth();
+
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
   const addRecord = () => {
-    if (!text.trim()) return;
+    if (!selectedDate || !text) return;
 
-    const next = {
-      ...records,
-      [currentDate]: [...(records[currentDate] || []), text],
-    };
+    const newRecords = { ...records };
+    if (!newRecords[selectedDate]) newRecords[selectedDate] = [];
 
-    setRecords(next);
+    newRecords[selectedDate].push({
+      text,
+      time: new Date().toLocaleTimeString(),
+    });
+
+    setRecords(newRecords);
     setText("");
   };
 
-  const deleteRecord = (index) => {
-    const day = records[currentDate] || [];
-    const nextDay = day.filter((_, i) => i !== index);
-
-    const next = {
-      ...records,
-      [currentDate]: nextDay,
-    };
-
-    setRecords(next);
+  const deleteRecord = (date, index) => {
+    const newRecords = { ...records };
+    newRecords[date].splice(index, 1);
+    if (newRecords[date].length === 0) delete newRecords[date];
+    setRecords(newRecords);
   };
 
-  // 백업 저장
-  const exportBackup = () => {
-    const backup = {
-      exportedAt: new Date().toISOString(),
-      records,
-    };
-
-    const blob = new Blob(
-      [JSON.stringify(backup, null, 2)],
-      { type: "application/json" }
-    );
-
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "nawa-backup.json";
-    a.click();
-
-    URL.revokeObjectURL(url);
-
-    setMessage("백업 파일 저장 완료");
-    setTimeout(() => setMessage(""), 2000);
+  const formatDate = (day) => {
+    return `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
   };
-
-  // 백업 불러오기
-  const importBackup = (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-
-    reader.onload = (e) => {
-      try {
-        const parsed = JSON.parse(e.target.result);
-
-        if (!parsed.records) {
-          throw new Error("invalid");
-        }
-
-        setRecords(parsed.records);
-
-        setMessage("백업 복원 완료");
-        setTimeout(() => setMessage(""), 2000);
-      } catch {
-        setMessage("백업 파일 오류");
-        setTimeout(() => setMessage(""), 2000);
-      }
-    };
-
-    reader.readAsText(file);
-  };
-
-  const dayRecords = records[currentDate] || [];
 
   return (
-    <div style={{ maxWidth: 600, margin: "auto", padding: 20 }}>
+    <div style={{ padding: 20, fontFamily: "sans-serif", maxWidth: 500, margin: "auto" }}>
+      <h2>✨ 나와의 대화</h2>
+      <p>링크 열면 바로 쓰는 감정 기록</p>
 
-      <h1>✨ 나와의 대화</h1>
+      <h3>달력 기록</h3>
 
-      <p>
-        링크 열면 바로 쓰는 감정 기록<br />
-        기록은 각자 기기에만 저장됩니다
-      </p>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(7,1fr)", gap: 8 }}>
+        {Array.from({ length: daysInMonth }, (_, i) => {
+          const day = i + 1;
+          const date = formatDate(day);
+          const count = records[date]?.length || 0;
 
-      <div style={{ marginBottom: 20 }}>
-        <button onClick={exportBackup}>백업 저장</button>
-
-        <button
-          onClick={() =>
-            document.getElementById("backupFile").click()
-          }
-          style={{ marginLeft: 10 }}
-        >
-          백업 불러오기
-        </button>
-
-        <input
-          id="backupFile"
-          type="file"
-          accept="application/json"
-          onChange={importBackup}
-          style={{ display: "none" }}
-        />
+          return (
+            <div
+              key={day}
+              onClick={() => setSelectedDate(date)}
+              style={{
+                border: "1px solid #ddd",
+                borderRadius: 10,
+                padding: 10,
+                textAlign: "center",
+                cursor: "pointer",
+                background: selectedDate === date ? "#eee" : "white",
+              }}
+            >
+              <div>{day}</div>
+              {count > 0 && <div style={{ color: "green" }}>{count}개</div>}
+            </div>
+          );
+        })}
       </div>
 
-      {message && (
-        <div style={{ marginBottom: 20 }}>{message}</div>
-      )}
+      <h3 style={{ marginTop: 20 }}>{selectedDate}</h3>
 
-      <input
-        type="date"
-        value={currentDate}
-        onChange={(e) => setCurrentDate(e.target.value)}
+      <textarea
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        placeholder="오늘 감정 기록..."
+        style={{ width: "100%", height: 80, marginTop: 10 }}
       />
-
-      <div style={{ marginTop: 20 }}>
-        <textarea
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          placeholder="오늘 감정 기록..."
-          style={{ width: "100%", height: 80 }}
-        />
-      </div>
 
       <button onClick={addRecord} style={{ marginTop: 10 }}>
         기록 추가
       </button>
 
       <div style={{ marginTop: 20 }}>
-        {dayRecords.map((item, i) => (
-          <div key={i} style={{ marginBottom: 10 }}>
-            {item}
-
+        {records[selectedDate]?.map((r, i) => (
+          <div key={i} style={{ borderBottom: "1px solid #eee", padding: 8 }}>
+            <div>{r.text}</div>
+            <small>{r.time}</small>
             <button
-              onClick={() => deleteRecord(i)}
+              onClick={() => deleteRecord(selectedDate, i)}
               style={{ marginLeft: 10 }}
             >
               삭제
