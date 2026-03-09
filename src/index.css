@@ -1,0 +1,25 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #fffaf2;
+  color: #4b3f35;
+}
+
+button {
+  cursor: pointer;
+}
+
+input, textarea {
+  font-family: inherit;
+}
+
+.rounded {
+  border-radius: 16px;
+}
+
+.card {
+  background: white;
+  border: 1px solid #eadfce;
+  border-radius: 16px;
+  padding: 16px;
+}
