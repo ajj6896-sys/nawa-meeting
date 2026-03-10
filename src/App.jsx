@@ -420,37 +420,47 @@ function CollapsibleGroup({ title, items, selected, onToggle, defaultOpen = fals
     </div>
   );
 }
-function InfoCards({ theme }) {
+function IntroModal({ theme, open, onClose }) {
+  if (!open) return null;
+
   return (
-    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-      <div className={`rounded-2xl p-4 ${cardClass(theme)}`}>
-        <div className="mb-1 text-sm font-semibold">이 앱은 어떤 도구야?</div>
-        <p className={`text-sm leading-6 ${mutedClass(theme)}`}>
-          감정을 고르고 질문을 따라가며 자기 대화를 기록하는 개인용 마음 기록장이야.
-        </p>
-      </div>
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 px-4">
+      <div className={`w-full max-w-md rounded-3xl p-6 shadow-xl ${cardClass(theme)}`}>
+        <div className="mb-4">
+          <div className="text-xl font-semibold">처음 사용하기 전에</div>
+          <p className={`mt-2 text-sm leading-6 ${mutedClass(theme)}`}>
+            편하게 시작할 수 있도록 꼭 알아두면 좋은 점만 적어뒀어.
+          </p>
+        </div>
 
-      <div className={`rounded-2xl p-4 ${cardClass(theme)}`}>
-        <div className="mb-1 text-sm font-semibold">기록 저장 방식</div>
-        <p className={`text-sm leading-6 ${mutedClass(theme)}`}>
-          기록은 이 브라우저에만 저장돼. 기기를 바꾸거나 브라우저 데이터를 지우면 기록이 사라질 수 있어.
-        </p>
-      </div>
+        <div className="space-y-3 text-sm">
+          <div>
+            <b>기록 저장 방식</b>
+            <p className={mutedClass(theme)}>
+              기록은 이 브라우저에만 저장돼. 기기를 바꾸거나 브라우저 데이터를 지우면 사라질 수 있어.
+            </p>
+          </div>
 
-      <div className={`rounded-2xl p-4 ${cardClass(theme)}`}>
-        <div className="mb-1 text-sm font-semibold">기록 보관 방법</div>
-        <p className={`text-sm leading-6 ${mutedClass(theme)}`}>
-          각 기록 오른쪽의 <b>복사</b> 버튼으로 내용을 바로 복사할 수 있어.
-          중요한 기록은 따로 붙여넣어 보관해두는 걸 권장해.
-        </p>
-      </div>
+          <div>
+            <b>기록 보관</b>
+            <p className={mutedClass(theme)}>
+              각 기록 오른쪽의 <b>복사</b> 버튼으로 내용을 복사할 수 있어. 중요한 기록은 따로 보관해두는 걸 권장해.
+            </p>
+          </div>
 
-      <div className={`rounded-2xl p-4 ${cardClass(theme)}`}>
-        <div className="mb-1 text-sm font-semibold">사용 전 알아둘 점</div>
-        <p className={`text-sm leading-6 ${mutedClass(theme)}`}>
-          이 앱은 감정 정리와 자기 대화를 돕는 기록 도구야.
-          상담, 치료, 의료적 판단을 대신하지 않아.
-        </p>
+          <div>
+            <b>알아둘 점</b>
+            <p className={mutedClass(theme)}>
+              이 앱은 감정 정리 도구야. 상담이나 치료를 대신하지 않아.
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-6">
+          <BaseButton onClick={onClose} className="w-full bg-slate-900 text-white">
+            확인했어
+          </BaseButton>
+        </div>
       </div>
     </div>
   );
@@ -459,6 +469,9 @@ export default function App() {
   const [theme, setTheme] = useState(() => localStorage.getItem(THEME_KEY) || "cream");
   const [records, setRecords] = useState(() => readRecords());
   const [currentDate, setCurrentDate] = useState(() => readUi().currentDate || todayString());
+  const [showIntro, setShowIntro] = useState(() => {
+  return localStorage.getItem("nawa-intro-seen") !== "yes";
+});
   const [selectedEntryId, setSelectedEntryId] = useState(() => readUi().selectedEntryId || "");
   const [entry, setEntry] = useState(emptyEntry(todayString()));
   const [savedMessage, setSavedMessage] = useState("");
@@ -613,6 +626,14 @@ ${(targetEntry.positive || []).join(", ") || ""}`;
 
   return (
     <div className={`${themeClass(theme)} p-3 sm:p-4 md:p-6`}>
+      <IntroModal
+  theme={theme}
+  open={showIntro}
+  onClose={() => {
+    setShowIntro(false);
+    localStorage.setItem("nawa-intro-seen", "yes");
+  }}
+/>
       <div className="mx-auto grid max-w-6xl grid-cols-1 gap-5 xl:grid-cols-[380px_minmax(0,1fr)]">
         <div className="space-y-5 xl:sticky xl:top-6 xl:self-start">
           <div className={`rounded-3xl p-5 shadow-sm ${heroClass(theme)}`}>
@@ -704,7 +725,7 @@ ${(targetEntry.positive || []).join(", ") || ""}`;
         </div>
 
         <div className="min-w-0 space-y-5 pb-24 md:pb-6">
-          <InfoCards theme={theme} />
+          
           <SectionCard title="▶ 오늘의 기록 제목" subtitle="하루에 여러 번 적을 수도 있으니까, 나중에 보기 편한 이름을 붙여줘." theme={theme}>
             <BaseInput
               value={entry.title}
