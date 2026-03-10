@@ -420,7 +420,41 @@ function CollapsibleGroup({ title, items, selected, onToggle, defaultOpen = fals
     </div>
   );
 }
+function InfoCards({ theme }) {
+  return (
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <div className={`rounded-2xl p-4 ${cardClass(theme)}`}>
+        <div className="mb-1 text-sm font-semibold">이 앱은 어떤 도구야?</div>
+        <p className={`text-sm leading-6 ${mutedClass(theme)}`}>
+          감정을 고르고 질문을 따라가며 자기 대화를 기록하는 개인용 마음 기록장이야.
+        </p>
+      </div>
 
+      <div className={`rounded-2xl p-4 ${cardClass(theme)}`}>
+        <div className="mb-1 text-sm font-semibold">기록 저장 방식</div>
+        <p className={`text-sm leading-6 ${mutedClass(theme)}`}>
+          기록은 이 브라우저에만 저장돼. 기기를 바꾸거나 브라우저 데이터를 지우면 기록이 사라질 수 있어.
+        </p>
+      </div>
+
+      <div className={`rounded-2xl p-4 ${cardClass(theme)}`}>
+        <div className="mb-1 text-sm font-semibold">기록 보관 방법</div>
+        <p className={`text-sm leading-6 ${mutedClass(theme)}`}>
+          각 기록 오른쪽의 <b>복사</b> 버튼으로 내용을 바로 복사할 수 있어.
+          중요한 기록은 따로 붙여넣어 보관해두는 걸 권장해.
+        </p>
+      </div>
+
+      <div className={`rounded-2xl p-4 ${cardClass(theme)}`}>
+        <div className="mb-1 text-sm font-semibold">사용 전 알아둘 점</div>
+        <p className={`text-sm leading-6 ${mutedClass(theme)}`}>
+          이 앱은 감정 정리와 자기 대화를 돕는 기록 도구야.
+          상담, 치료, 의료적 판단을 대신하지 않아.
+        </p>
+      </div>
+    </div>
+  );
+}
 export default function App() {
   const [theme, setTheme] = useState(() => localStorage.getItem(THEME_KEY) || "cream");
   const [records, setRecords] = useState(() => readRecords());
