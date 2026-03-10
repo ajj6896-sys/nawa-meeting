@@ -7,7 +7,6 @@ import {
   Sparkles,
   ChevronLeft,
   ChevronRight,
-  Pencil,
   Check,
 } from "lucide-react";
 
@@ -44,9 +43,9 @@ const POSITIVE_GROUPS = [
   { key: "interest", title: "흥미", items: ["흥미로운", "재미있는"] },
 ];
 
-const RECORDS_KEY = "nawa-records-v11";
-const UI_KEY = "nawa-ui-v11";
-const THEME_KEY = "nawa-theme-v11";
+const RECORDS_KEY = "nawa-records-v12";
+const UI_KEY = "nawa-ui-v12";
+const THEME_KEY = "nawa-theme-v12";
 
 const THEMES = [
   { key: "cream", label: "🍦 크림" },
@@ -84,6 +83,7 @@ const emptyEntry = (date = todayString()) => ({
   needs: [],
   needsOtherChecked: false,
   needsOtherText: "",
+  needsEmpathy: "",
   message: "",
   selfMessage: "",
   canDo: "",
@@ -272,7 +272,7 @@ function MonthCalendar({ records, currentDate, onSelectDate, theme, monthCursor,
         })}
       </div>
 
-      <div className={`mt-3 text-xs ${mutedClass(theme)}`}>작성한 날은 개수로 표시돼. 날짜를 누르면 그날 기록을 볼 수 있어.</div>
+      <div className={`mt-3 text-xs ${mutedClass(theme)}`}>기록이 있는 날은 개수로 표시돼. 날짜를 누르면 그날의 마음을 다시 볼 수 있어.</div>
     </div>
   );
 }
@@ -293,13 +293,13 @@ function EntryList({ entries, selectedEntryId, onSelect, onCreate, onDelete, onC
       <div className="mb-4 flex items-center justify-between gap-3">
         <div className="text-xl font-semibold">{currentDate} 기록</div>
         <BaseButton onClick={onCreate} className="bg-slate-900 text-white">
-          <Plus className="mr-1 h-4 w-4" />추가
+          <Plus className="mr-1 h-4 w-4" />새 기록
         </BaseButton>
       </div>
 
       <div className="space-y-2">
         {entries.length === 0 ? (
-          <div className={`text-sm ${mutedClass(theme)}`}>이 날짜에는 아직 기록이 없어.</div>
+          <div className={`text-sm ${mutedClass(theme)}`}>이 날에는 아직 적어둔 마음이 없어.</div>
         ) : (
           entries.map((entry, idx) => {
             const itemKey = `${entry.id}::${idx}`;
@@ -385,7 +385,7 @@ function SectionCard({ title, children, subtitle, theme }) {
     <div className={`rounded-3xl p-5 shadow-sm ${cardClass(theme)}`}>
       <div className="mb-3">
         <div className="text-xl font-semibold">{title}</div>
-        {subtitle ? <p className={`mt-1 text-sm ${mutedClass(theme)}`}>{subtitle}</p> : null}
+        {subtitle ? <p className={`mt-1 text-sm leading-6 ${mutedClass(theme)}`}>{subtitle}</p> : null}
       </div>
       {children}
     </div>
@@ -399,7 +399,7 @@ function CollapsibleGroup({ title, items, selected, onToggle, defaultOpen = fals
       <button type="button" onClick={() => setOpen((v) => !v)} className="flex w-full items-center justify-between px-4 py-4 text-left">
         <div>
           <div className={`text-base font-semibold ${theme === "night" ? "text-[#f7f4ee]" : "text-slate-900"}`}>{title}</div>
-          <div className={`text-sm ${mutedClass(theme)}`}>{open ? "접기" : "눌러서 펼치기"}</div>
+          <div className={`text-sm ${mutedClass(theme)}`}>{open ? "접어둘래" : "천천히 펼쳐볼래"}</div>
         </div>
         {open ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
       </button>
@@ -422,7 +422,6 @@ function CollapsibleGroup({ title, items, selected, onToggle, defaultOpen = fals
 }
 
 export default function App() {
-  const [showStats] = useState(false);
   const [theme, setTheme] = useState(() => localStorage.getItem(THEME_KEY) || "cream");
   const [records, setRecords] = useState(() => readRecords());
   const [currentDate, setCurrentDate] = useState(() => readUi().currentDate || todayString());
@@ -477,7 +476,7 @@ export default function App() {
         saveRecords(next);
         return next;
       });
-      setSavedMessage("자동 저장됨");
+      setSavedMessage("살포시 저장됐어");
       window.clearTimeout(window.__nawaSaveMessageTimer);
       window.__nawaSaveMessageTimer = window.setTimeout(() => setSavedMessage(""), 800);
     }, 900);
@@ -516,14 +515,28 @@ export default function App() {
   };
 
   const handleCopyEntry = async (targetEntry) => {
+    const needsList = [
+      ...(targetEntry.needs || []),
+      ...(targetEntry.needsOtherChecked && targetEntry.needsOtherText?.trim() ? [targetEntry.needsOtherText.trim()] : []),
+    ];
+
     const text = `제목: ${targetEntry.title || ""}
 날짜: ${targetEntry.date} ${targetEntry.timeLabel || ""}
+
+그때 들었던 감정:
+${(targetEntry.negative || []).join(", ") || ""}
 
 무슨 일이 있었나:
 ${targetEntry.reason || ""}
 
-공감:
+그래서 그런 감정이 들었구나:
 ${targetEntry.empathy || ""}
+
+바랐던 것 / 필요했던 것:
+${needsList.join(", ") || ""}
+
+그렇구나~
+${targetEntry.needsEmpathy || ""}
 
 내가 하고 싶은 말:
 ${targetEntry.message || ""}
@@ -555,11 +568,11 @@ ${(targetEntry.positive || []).join(", ") || ""}`;
         document.body.removeChild(textarea);
       }
       if (copyMessageTimer.current) clearTimeout(copyMessageTimer.current);
-      setCopyMessage("복사완료");
+      setCopyMessage("복사됐어");
       copyMessageTimer.current = setTimeout(() => setCopyMessage(""), 1500);
     } catch {
       if (copyMessageTimer.current) clearTimeout(copyMessageTimer.current);
-      setCopyMessage("복사 실패");
+      setCopyMessage("복사에 실패했어");
       copyMessageTimer.current = setTimeout(() => setCopyMessage(""), 1500);
     }
   };
@@ -575,13 +588,13 @@ ${(targetEntry.positive || []).join(", ") || ""}`;
                   <Sparkles className="h-5 w-5" />
                   <div className="text-2xl font-semibold">나와의 대화</div>
                 </div>
-                <p className={`mt-1 text-sm ${mutedClass(theme)}`}>링크 열면 바로 쓰는 감정 기록</p>
+                <p className={`mt-1 text-sm ${mutedClass(theme)}`}>마음을 천천히 적어둘 수 있는 작은 기록장</p>
               </div>
             </div>
 
             <div>
-              <div className={`text-sm ${mutedClass(theme)}`}>내 브라우저에만 저장됨</div>
-              <div className={`mt-2 text-xs ${mutedClass(theme)}`}>친구와 링크는 같이 써도, 기록은 각자 자기 기기 안에만 저장돼.</div>
+              <div className={`text-sm ${mutedClass(theme)}`}>기록은 이 브라우저에 저장돼</div>
+              <div className={`mt-2 text-xs leading-6 ${mutedClass(theme)}`}>중요한 기록은 복사해서 따로 보관해두면 좋아. 링크를 같이 써도 기록은 각자 기기 안에 남아.</div>
             </div>
 
             {copyMessage ? (
@@ -596,7 +609,7 @@ ${(targetEntry.positive || []).join(", ") || ""}`;
           <div className={`rounded-3xl p-4 shadow-sm ${cardClass(theme)}`}>
             <div className="mb-3">
               <div className="text-base font-semibold">테마</div>
-              <div className={`mt-1 text-xs ${mutedClass(theme)}`}>원하는 분위기로 바꿔서 기록해봐.</div>
+              <div className={`mt-1 text-xs ${mutedClass(theme)}`}>오늘 마음에 잘 어울리는 분위기로 골라봐.</div>
             </div>
             <div className="grid grid-cols-2 gap-2">
               {THEMES.map((item) => (
@@ -648,7 +661,7 @@ ${(targetEntry.positive || []).join(", ") || ""}`;
               if (selectedEntryId === targetEntry.id) {
                 setEntry((prev) => ({ ...prev, title: nextTitle, updatedAt: new Date().toISOString() }));
               }
-              setSavedMessage("제목을 수정했어");
+              setSavedMessage("제목을 살짝 고쳐뒀어");
               setTimeout(() => setSavedMessage(""), 1200);
             }}
             theme={theme}
@@ -657,16 +670,16 @@ ${(targetEntry.positive || []).join(", ") || ""}`;
         </div>
 
         <div className="min-w-0 space-y-5 pb-24 md:pb-6">
-          <SectionCard title="▶ 기록 제목" subtitle="한날에 여러 번 쓸 수 있어서 구분용 제목을 적어두면 좋아." theme={theme}>
+          <SectionCard title="▶ 오늘의 기록 제목" subtitle="하루에 여러 번 적을 수도 있으니까, 나중에 보기 편한 이름을 붙여줘." theme={theme}>
             <BaseInput
               value={entry.title}
               onChange={(e) => updateEntry({ title: e.target.value })}
-              placeholder="예: 아침에 든 생각"
+              placeholder="예: 아침에 들었던 마음"
               className={fieldClass(theme)}
             />
           </SectionCard>
 
-          <SectionCard title="▶ 기분이 어때?" subtitle="감정표는 하나도 빠뜨리지 않고 모두 넣었어. 눌러서 펼치면 돼." theme={theme}>
+          <SectionCard title="▶ 지금 어떤 마음이 들어?" subtitle="마음이 닿는 감정을 천천히 골라봐." theme={theme}>
             <div className="space-y-3">
               {NEGATIVE_GROUPS.map((group, idx) => (
                 <CollapsibleGroup
@@ -682,15 +695,15 @@ ${(targetEntry.positive || []).join(", ") || ""}`;
             </div>
           </SectionCard>
 
-          <SectionCard title="▶ 무엇 때문에?" theme={theme}>
+          <SectionCard title="▶ 무슨 일이 있었을까?" subtitle="천천히 떠오르는 만큼만 적어도 괜찮아." theme={theme}>
             <BaseTextarea value={entry.reason} onChange={(e) => updateEntry({ reason: e.target.value })} className={`${fieldClass(theme)} min-h-40`} />
           </SectionCard>
 
-          <SectionCard title="▶ 그래서 그런 감정이 들었구나" subtitle="그럴 수 있지, 이해돼." theme={theme}>
+          <SectionCard title="▶ 그래서 그런 감정이 들었구나" subtitle="그랬다면 충분히 그럴 수 있었겠다고, 마음을 한번 다정하게 바라봐." theme={theme}>
             <BaseTextarea value={entry.empathy} onChange={(e) => updateEntry({ empathy: e.target.value })} className={`${fieldClass(theme)} min-h-36`} />
           </SectionCard>
 
-          <SectionCard title="▶ 그럼 네가 그 상대(또는 자신)에게 바라는 것은 무엇이야?" theme={theme}>
+          <SectionCard title="▶ 그때 내가 바랐던 건 뭐였을까?" subtitle="상대에게서, 혹은 나 자신에게서 바랐던 걸 골라봐." theme={theme}>
             <div className="space-y-3">
               {NEED_GROUPS.map((group) => (
                 <CollapsibleGroup
@@ -706,31 +719,44 @@ ${(targetEntry.positive || []).join(", ") || ""}`;
                 <div className="font-semibold">기타</div>
                 <label className="flex items-center gap-3">
                   <BaseCheckbox checked={entry.needsOtherChecked} onChange={() => updateEntry({ needsOtherChecked: !entry.needsOtherChecked })} />
-                  <span>기타 항목 사용</span>
+                  <span>직접 적어볼래</span>
                 </label>
                 <BaseInput
                   value={entry.needsOtherText}
                   onChange={(e) => updateEntry({ needsOtherText: e.target.value })}
-                  placeholder="기타 내용을 적어줘"
+                  placeholder="떠오르는 바람이나 필요를 적어줘"
                   className={fieldClass(theme)}
                 />
               </div>
             </div>
           </SectionCard>
 
-          <SectionCard title="▶ 네가 상대에게 하고 싶은 말은 뭐야?" theme={theme}>
+          <SectionCard
+            title="▶️ 그렇구나~"
+            subtitle="욕구가 채워지지 않아서 더 속상했을 수도 있어. 그 마음을 한 번 더 다정하게 안아줘."
+            theme={theme}
+          >
+            <BaseTextarea
+              value={entry.needsEmpathy}
+              onChange={(e) => updateEntry({ needsEmpathy: e.target.value })}
+              placeholder="예: 연락을 바랐는데 닿지 않아서 더 속상하고 답답했구나."
+              className={`${fieldClass(theme)} min-h-36`}
+            />
+          </SectionCard>
+
+          <SectionCard title="▶ 네가 상대에게 하고 싶은 말은 뭐야?" subtitle="마음속에 남아 있는 말을 조용히 꺼내봐." theme={theme}>
             <BaseTextarea value={entry.message} onChange={(e) => updateEntry({ message: e.target.value })} className={`${fieldClass(theme)} min-h-44`} />
           </SectionCard>
 
           <SectionCard
             title="▶ 너는 자신에게 어떤 말을 해주고 싶어?"
-            subtitle="자신에게 공감, 지지, 격려, 응원, 칭찬, 사랑, 축복의 말을 해줘. 예: 많이 힘들었지? 어떤 일이든지 나에게 말하면 내가 다 들어줄게. 나는 항상 네 편이고 너를 응원하고 있어. 사랑해."
+            subtitle="공감, 지지, 응원, 칭찬… 지금의 나에게 다정한 말을 건네줘."
             theme={theme}
           >
             <BaseTextarea value={entry.selfMessage} onChange={(e) => updateEntry({ selfMessage: e.target.value })} className={`${fieldClass(theme)} min-h-44`} />
           </SectionCard>
 
-          <SectionCard title="▶ 네가 원하는 것을 이루기 위해 무엇을 할 수 있을까?" theme={theme}>
+          <SectionCard title="▶ 내가 해볼 수 있는 건 무엇일까?" subtitle="할 수 있는 것과, 지금은 내 힘으로 어려운 것을 나눠 적어봐." theme={theme}>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div className="space-y-2">
                 <div className={`text-sm ${mutedClass(theme)}`}>할 수 있는 것</div>
@@ -743,7 +769,7 @@ ${(targetEntry.positive || []).join(", ") || ""}`;
             </div>
           </SectionCard>
 
-          <SectionCard title="▶ 지금은 기분이 어때?" theme={theme}>
+          <SectionCard title="▶ 지금은 마음이 어때?" subtitle="조금 달라진 감정이 있다면 골라봐." theme={theme}>
             <div className="space-y-3">
               {POSITIVE_GROUPS.map((group) => (
                 <CollapsibleGroup
@@ -773,7 +799,7 @@ ${(targetEntry.positive || []).join(", ") || ""}`;
                   saveRecords(next);
                   return next;
                 });
-                setSavedMessage("저장하였습니다");
+                setSavedMessage("포근하게 저장해뒀어");
                 setTimeout(() => {
                   setSavedMessage("");
                   setIsSaving(false);
@@ -781,7 +807,7 @@ ${(targetEntry.positive || []).join(", ") || ""}`;
               }}
               className={`w-full h-12 bg-slate-900 text-base text-white shadow-lg ${isSaving ? "scale-[0.98] opacity-90" : "scale-100"}`}
             >
-              <Check className="mr-2 h-4 w-4" />{isSaving ? "저장 중..." : "저장"}
+              <Check className="mr-2 h-4 w-4" />{isSaving ? "저장 중..." : "저장하기"}
             </BaseButton>
           </div>
         </div>
