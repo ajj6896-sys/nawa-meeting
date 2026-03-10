@@ -410,7 +410,6 @@ const emptyEntry = (date = todayString()) => ({
   selfMessage: "",
   canDo: "",
   cannotDo: "",
-  prayer: "",
   positive: [],
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
