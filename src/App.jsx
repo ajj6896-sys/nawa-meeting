@@ -7,45 +7,358 @@ import {
   Sparkles,
   ChevronLeft,
   ChevronRight,
+  Pencil,
   Check,
 } from "lucide-react";
+import "./index.css";
 
 const NEGATIVE_GROUPS = [
-  { key: "fear", title: "걱정 / 두려움", items: ["걱정되는", "암담한", "염려되는", "근심하는", "신경 쓰이는", "무서운", "겁나는", "두려운", "주눅 든"] },
-  { key: "anxiety", title: "불안 / 긴장", items: ["불안한", "초조한", "긴장된", "조마조마한", "불편한"] },
-  { key: "awkward", title: "곤란 / 어색함", items: ["난처한", "쑥스러운", "괴로운", "답답한", "갑갑한", "서먹한", "어색한", "찝찝한"] },
-  { key: "sadness", title: "슬픔 / 상실", items: ["슬픈", "그리운", "우울한", "막막한", "서글픈", "서러운", "울적한", "참담한", "비참한", "속상한"] },
-  { key: "lonely", title: "외로움", items: ["외로운", "고독한", "공허한", "쓸쓸한"] },
-  { key: "fatigue", title: "무기력 / 피로", items: ["무력한", "무기력한", "침울한", "피곤한", "고된", "따분한", "지겨운", "절망스러운", "실망스러운", "좌절한", "힘든"] },
-  { key: "boredom", title: "지루함", items: ["무료한", "지친", "심심한", "질린", "지루한"] },
-  { key: "confused", title: "당황 / 혼란", items: ["혼란스러운", "놀란", "민망한", "당황한", "부끄러운"] },
-  { key: "anger", title: "분노", items: ["화나는", "분한", "억울한", "짜증나는"] },
+  {
+    key: "fear",
+    title: "걱정 / 두려움",
+    items: [
+      "걱정되는",
+      "암담한",
+      "염려되는",
+      "근심하는",
+      "신경 쓰이는",
+      "무서운",
+      "겁나는",
+      "두려운",
+      "주눅 든",
+    ],
+  },
+  {
+    key: "anxiety",
+    title: "불안 / 긴장",
+    items: ["불안한", "초조한", "긴장된", "조마조마한", "불편한"],
+  },
+  {
+    key: "awkward",
+    title: "곤란 / 어색함",
+    items: [
+      "난처한",
+      "쑥스러운",
+      "괴로운",
+      "답답한",
+      "갑갑한",
+      "서먹한",
+      "어색한",
+      "찝찝한",
+    ],
+  },
+  {
+    key: "sadness",
+    title: "슬픔 / 상실",
+    items: [
+      "슬픈",
+      "그리운",
+      "우울한",
+      "막막한",
+      "서글픈",
+      "서러운",
+      "울적한",
+      "참담한",
+      "비참한",
+      "속상한",
+    ],
+  },
+  {
+    key: "lonely",
+    title: "외로움",
+    items: ["외로운", "고독한", "공허한", "쓸쓸한"],
+  },
+  {
+    key: "fatigue",
+    title: "무기력 / 피로",
+    items: [
+      "무력한",
+      "무기력한",
+      "침울한",
+      "피곤한",
+      "고된",
+      "따분한",
+      "지겨운",
+      "절망스러운",
+      "실망스러운",
+      "좌절한",
+      "힘든",
+    ],
+  },
+  {
+    key: "boredom",
+    title: "지루함",
+    items: ["무료한", "지친", "심심한", "질린", "지루한"],
+  },
+  {
+    key: "confused",
+    title: "당황 / 혼란",
+    items: ["혼란스러운", "놀란", "민망한", "당황한", "부끄러운"],
+  },
+  {
+    key: "anger",
+    title: "분노",
+    items: ["화나는", "분한", "억울한", "짜증나는"],
+  },
 ];
+const EMOTION_EMOJI = {
+  "걱정되는": "😟",
+  "암담한": "😞",
+  "염려되는": "😟",
+  "근심하는": "😔",
+  "신경 쓰이는": "😣",
+  "무서운": "😨",
+  "겁나는": "😰",
+  "두려운": "😨",
+  "주눅 든": "🥺",
+
+  "불안한": "😥",
+  "초조한": "😖",
+  "긴장된": "😵",
+  "조마조마한": "😬",
+  "불편한": "😕",
+
+  "난처한": "😓",
+  "쑥스러운": "🫣",
+  "괴로운": "😣",
+  "답답한": "😮‍💨",
+  "갑갑한": "😮‍💨",
+  "서먹한": "😶",
+  "어색한": "😅",
+  "찝찝한": "😖",
+
+  "슬픈": "😢",
+  "그리운": "🥲",
+  "우울한": "😞",
+  "막막한": "😔",
+  "서글픈": "😢",
+  "서러운": "😭",
+  "울적한": "☁️",
+  "참담한": "😣",
+  "비참한": "😞",
+  "속상한": "🥹",
+
+  "외로운": "🥲",
+  "고독한": "🌙",
+  "공허한": "🫥",
+  "쓸쓸한": "🍂",
+
+  "무력한": "😵‍💫",
+  "무기력한": "🫠",
+  "침울한": "☁️",
+  "피곤한": "😪",
+  "고된": "🥀",
+  "따분한": "😑",
+  "지겨운": "😩",
+  "절망스러운": "😞",
+  "실망스러운": "😔",
+  "좌절한": "😣",
+  "힘든": "🥺",
+
+  "무료한": "😐",
+  "지친": "😮‍💨",
+  "심심한": "😶",
+  "질린": "😩",
+  "지루한": "🥱",
+
+  "혼란스러운": "😵‍💫",
+  "놀란": "😮",
+  "민망한": "😳",
+  "당황한": "😵",
+  "부끄러운": "🙈",
+
+  "화나는": "😠",
+  "분한": "😤",
+  "억울한": "🥲",
+  "짜증나는": "😣",
+};
+
+const POSITIVE_EMOJI = {
+  "고마운": "💛",
+  "감사한": "🙏",
+  "기쁜": "😊",
+  "반가운": "😄",
+  "행복한": "🥰",
+  "편안함": "🌿",
+  "편안한": "🌿",
+  "홀가분한": "✨",
+  "느긋한": "☁️",
+  "차분한": "🕊️",
+  "평온한": "🍃",
+  "고요한": "🌙",
+
+  "활기찬": "⚡",
+  "신나는": "🎉",
+  "짜릿한": "🔥",
+  "기력이 넘치는": "💪",
+  "힘이 솟는": "🌞",
+
+  "희망에 찬": "🌈",
+  "기대에 부푼": "💫",
+  "자신감 있는": "😎",
+
+  "사랑하는": "💗",
+  "친근한": "🤝",
+  "훈훈한": "☀️",
+  "따뜻한": "🧡",
+  "포근한": "🧸",
+
+  "뿌듯한": "🏅",
+  "만족스러운": "✔️",
+  "상쾌한": "🌬️",
+  "개운한": "🫧",
+  "후련한": "🙌",
+  "든든한": "🛡️",
+
+  "감동받은": "🥹",
+  "뭉클한": "💞",
+  "감격스러운": "✨",
+  "벅찬": "🌸",
+  "환희에 찬": "🎆",
+  "황홀한": "🌟",
+
+  "흥미로운": "👀",
+  "재미있는": "🎈",
+};
 
 const NEED_GROUPS = [
-  { key: "autonomy", title: "자율성", items: ["자신의 꿈·목표·가치를 선택할 자유", "목표를 이루는 방법을 스스로 선택할 자유"] },
-  { key: "survival", title: "신체적 / 생존", items: ["공기", "음식", "물", "주거", "휴식", "수면", "안전", "신체적 접촉", "편안함", "운동"] },
-  { key: "social", title: "사회적 / 정서", items: ["소통", "관계", "우정", "존중", "공감", "이해", "지지", "협력", "사랑", "관심", "소속감", "신뢰"] },
-  { key: "play", title: "놀이 / 재미", items: ["즐거움", "재미", "유머", "웃음"] },
-  { key: "meaning", title: "삶의 의미", items: ["기여", "도전", "발견", "보람", "의미", "희망", "열정"] },
-  { key: "truth", title: "진실성", items: ["정직", "진실", "개성", "자기존중", "비전", "꿈"] },
-  { key: "peace", title: "아름다움 / 평화", items: ["아름다움", "평화", "조화", "질서", "평온함"] },
-  { key: "selfRealization", title: "자아구현", items: ["성취", "배움", "성장", "창조성", "자기표현", "자신감"] },
+  {
+    key: "autonomy",
+    title: "자율성",
+    items: [
+      "자신의 꿈·목표·가치를 선택할 자유",
+      "목표를 이루는 방법을 스스로 선택할 자유",
+    ],
+  },
+  {
+    key: "survival",
+    title: "신체적 / 생존",
+    items: [
+      "공기",
+      "음식",
+      "물",
+      "주거",
+      "휴식",
+      "수면",
+      "안전",
+      "신체적 접촉",
+      "편안함",
+      "운동",
+    ],
+  },
+  {
+    key: "social",
+    title: "사회적 / 정서",
+    items: [
+      "소통",
+      "관계",
+      "우정",
+      "존중",
+      "공감",
+      "이해",
+      "지지",
+      "협력",
+      "사랑",
+      "관심",
+      "소속감",
+      "신뢰",
+    ],
+  },
+  {
+    key: "play",
+    title: "놀이 / 재미",
+    items: ["즐거움", "재미", "유머", "웃음"],
+  },
+  {
+    key: "meaning",
+    title: "삶의 의미",
+    items: ["기여", "도전", "발견", "보람", "의미", "희망", "열정"],
+  },
+  {
+    key: "truth",
+    title: "진실성",
+    items: ["정직", "진실", "개성", "자기존중", "비전", "꿈"],
+  },
+  {
+    key: "peace",
+    title: "아름다움 / 평화",
+    items: ["아름다움", "평화", "조화", "질서", "평온함"],
+  },
+  {
+    key: "selfRealization",
+    title: "자아구현",
+    items: ["성취", "배움", "성장", "창조성", "자기표현", "자신감"],
+  },
 ];
 
 const POSITIVE_GROUPS = [
-  { key: "gratitude", title: "감사 / 기쁨", items: ["고마운", "감사한", "기쁜", "반가운", "행복한", "편안함", "편안한", "홀가분한", "느긋한", "차분한", "평온한", "고요한"] },
-  { key: "energy", title: "활력", items: ["활기찬", "신나는", "짜릿한", "기력이 넘치는", "힘이 솟는"] },
-  { key: "hope", title: "희망 / 기대", items: ["희망에 찬", "기대에 부푼", "자신감 있는"] },
-  { key: "warmth", title: "사랑 / 따뜻함", items: ["사랑하는", "친근한", "훈훈한", "따뜻한", "포근한"] },
-  { key: "satisfaction", title: "만족 / 성취", items: ["뿌듯한", "만족스러운", "상쾌한", "개운한", "후련한", "든든한"] },
-  { key: "moved", title: "감동", items: ["감동받은", "뭉클한", "감격스러운", "벅찬", "환희에 찬", "황홀한"] },
-  { key: "interest", title: "흥미", items: ["흥미로운", "재미있는"] },
+  {
+    key: "gratitude",
+    title: "감사 / 기쁨",
+    items: [
+      "고마운",
+      "감사한",
+      "기쁜",
+      "반가운",
+      "행복한",
+      "편안함",
+      "편안한",
+      "홀가분한",
+      "느긋한",
+      "차분한",
+      "평온한",
+      "고요한",
+    ],
+  },
+  {
+    key: "energy",
+    title: "활력",
+    items: ["활기찬", "신나는", "짜릿한", "기력이 넘치는", "힘이 솟는"],
+  },
+  {
+    key: "hope",
+    title: "희망 / 기대",
+    items: ["희망에 찬", "기대에 부푼", "자신감 있는"],
+  },
+  {
+    key: "warmth",
+    title: "사랑 / 따뜻함",
+    items: ["사랑하는", "친근한", "훈훈한", "따뜻한", "포근한"],
+  },
+  {
+    key: "satisfaction",
+    title: "만족 / 성취",
+    items: [
+      "뿌듯한",
+      "만족스러운",
+      "상쾌한",
+      "개운한",
+      "후련한",
+      "든든한",
+    ],
+  },
+  {
+    key: "moved",
+    title: "감동",
+    items: [
+      "감동받은",
+      "뭉클한",
+      "감격스러운",
+      "벅찬",
+      "환희에 찬",
+      "황홀한",
+    ],
+  },
+  {
+    key: "interest",
+    title: "흥미",
+    items: ["흥미로운", "재미있는"],
+  },
 ];
 
-const RECORDS_KEY = "nawa-records-v12";
-const UI_KEY = "nawa-ui-v12";
-const THEME_KEY = "nawa-theme-v12";
+const RECORDS_KEY = "nawa-prayer-talk-records-v3";
+const UI_KEY = "nawa-prayer-talk-ui-v3";
+const THEME_KEY = "nawa-prayer-talk-theme-v3";
 
 const THEMES = [
   { key: "cream", label: "🍦 크림" },
@@ -57,19 +370,28 @@ const THEMES = [
 
 const todayString = () => {
   const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(
+    d.getDate()
+  ).padStart(2, "0")}`;
 };
 
 const nowTimeString = () => {
   const d = new Date();
-  return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
+  return `${String(d.getHours()).padStart(2, "0")}:${String(
+    d.getMinutes()
+  ).padStart(2, "0")}`;
 };
 
-const ymd = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+const ymd = (d) =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(
+    d.getDate()
+  ).padStart(2, "0")}`;
+
 const parseYmd = (s) => {
   const [y, m, d] = (s || todayString()).split("-").map(Number);
   return new Date(y, (m || 1) - 1, d || 1);
 };
+
 const entryId = () => `entry-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
 const emptyEntry = (date = todayString()) => ({
@@ -88,6 +410,7 @@ const emptyEntry = (date = todayString()) => ({
   selfMessage: "",
   canDo: "",
   cannotDo: "",
+  prayer: "",
   positive: [],
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
@@ -96,15 +419,29 @@ const emptyEntry = (date = todayString()) => ({
 const normalizeRecords = (raw) => {
   if (!raw || typeof raw !== "object") return {};
   const out = {};
+
   Object.entries(raw).forEach(([date, value]) => {
     if (Array.isArray(value)) {
-      out[date] = value.map((entry) => ({ ...emptyEntry(date), ...entry, date, id: entry.id || entryId() }));
+      out[date] = value.map((entry) => ({
+        ...emptyEntry(date),
+        ...entry,
+        date,
+        id: entry.id || entryId(),
+      }));
     } else if (value && typeof value === "object") {
-      out[date] = [{ ...emptyEntry(date), ...value, date, id: value.id || entryId() }];
+      out[date] = [
+        {
+          ...emptyEntry(date),
+          ...value,
+          date,
+          id: value.id || entryId(),
+        },
+      ];
     } else {
       out[date] = [];
     }
   });
+
   return out;
 };
 
@@ -118,7 +455,8 @@ const readRecords = () => {
   }
 };
 
-const saveRecords = (records) => localStorage.setItem(RECORDS_KEY, JSON.stringify(records));
+const saveRecords = (records) =>
+  localStorage.setItem(RECORDS_KEY, JSON.stringify(records));
 
 const readUi = () => {
   try {
@@ -130,81 +468,44 @@ const readUi = () => {
 };
 
 const saveUi = (ui) => localStorage.setItem(UI_KEY, JSON.stringify(ui));
-const toggleInList = (list, value) => (list.includes(value) ? list.filter((v) => v !== value) : [...list, value]);
 
-const themeClass = (theme) => {
-  if (theme === "night") return "min-h-screen bg-[#181926] text-[#f7f4ee]";
-  if (theme === "sage") return "min-h-screen bg-[#f3f8f2] text-[#2f3a32]";
-  if (theme === "lavender") return "min-h-screen bg-[#faf5ff] text-[#43324f]";
-  if (theme === "peach") return "min-h-screen bg-[#fff6f1] text-[#4a342b]";
-  return "min-h-screen bg-[#fffaf2] text-[#4b3f35]";
-};
+const toggleInList = (list, value) =>
+  list.includes(value) ? list.filter((v) => v !== value) : [...list, value];
 
-const cardClass = (theme) => {
-  if (theme === "night") return "bg-[#232537] border border-[#3a3d57] text-[#f7f4ee]";
-  if (theme === "sage") return "bg-white/95 border border-[#d7e7d7]";
-  if (theme === "lavender") return "bg-white/95 border border-[#eadcf8]";
-  if (theme === "peach") return "bg-white/95 border border-[#f6d9cb]";
-  return "bg-white border border-[#eadfce]";
-};
-
-const mutedClass = (theme) => {
-  if (theme === "night") return "text-[#c8c3d9]";
-  if (theme === "sage") return "text-[#5f7a67]";
-  if (theme === "lavender") return "text-[#7a5c91]";
-  if (theme === "peach") return "text-[#a0624f]";
-  return "text-[#8a6f5a]";
-};
-
-const accentClass = (theme) => {
-  if (theme === "night") return "text-[#f7f4ee]";
-  if (theme === "sage") return "text-[#42614b]";
-  if (theme === "lavender") return "text-[#6d4d86]";
-  if (theme === "peach") return "text-[#b85c38]";
-  return "text-[#8b5e3c]";
-};
-
-const fieldClass = (theme) => {
-  if (theme === "night") return "w-full rounded-2xl border border-[#4a4d69] bg-[#2a2d44] px-4 py-3 text-[#f7f4ee] outline-none";
-  if (theme === "sage") return "w-full rounded-2xl border border-[#cfe0cf] bg-white px-4 py-3 text-[#2f3a32] outline-none";
-  if (theme === "lavender") return "w-full rounded-2xl border border-[#dcc9f0] bg-white px-4 py-3 text-[#43324f] outline-none";
-  if (theme === "peach") return "w-full rounded-2xl border border-[#f0cbbb] bg-white px-4 py-3 text-[#4a342b] outline-none";
-  return "w-full rounded-2xl border border-[#e6d7c3] bg-white px-4 py-3 text-[#4b3f35] outline-none";
-};
-
-const heroClass = (theme) => {
-  if (theme === "night") return "border border-[#3a3d57] bg-gradient-to-br from-[#232537] via-[#202233] to-[#181926]";
-  if (theme === "sage") return "border border-[#d7e7d7] bg-gradient-to-br from-[#eef7ed] via-[#f7fbf6] to-white";
-  if (theme === "lavender") return "border border-[#eadcf8] bg-gradient-to-br from-[#f6effd] via-[#fbf7ff] to-white";
-  if (theme === "peach") return "border border-[#f6d9cb] bg-gradient-to-br from-[#fff0e8] via-[#fff7f2] to-white";
-  return "border border-[#eadfce] bg-gradient-to-br from-[#fff8ef] via-[#fffcf7] to-white";
-};
+function appThemeClass(theme) {
+  return `app-root theme-${theme}`;
+}
 
 function BaseButton({ children, className = "", type = "button", onClick }) {
   return (
-    <button
-      type={type}
-      onClick={onClick}
-      className={`inline-flex items-center justify-center rounded-2xl px-4 py-2 font-medium transition active:scale-[0.98] ${className}`}
-    >
+    
+    <button type={type} onClick={onClick} className={`btn ${className}`}>
       {children}
     </button>
   );
 }
 
 function BaseInput(props) {
-  return <input {...props} />;
+  return <input {...props} className={`field ${props.className || ""}`} />;
 }
 
 function BaseTextarea(props) {
-  return <textarea {...props} />;
+  return <textarea {...props} className={`field textarea ${props.className || ""}`} />;
 }
 
 function BaseCheckbox({ checked, onChange, id }) {
-  return <input id={id} type="checkbox" checked={checked} onChange={onChange} className="mt-1 h-4 w-4" />;
+  return (
+    <input
+      id={id}
+      type="checkbox"
+      checked={checked}
+      onChange={onChange}
+      className="checkbox"
+    />
+  );
 }
 
-function MonthCalendar({ records, currentDate, onSelectDate, theme, monthCursor, setMonthCursor }) {
+function MonthCalendar({ records, currentDate, onSelectDate, monthCursor, setMonthCursor }) {
   const year = monthCursor.getFullYear();
   const month = monthCursor.getMonth();
   const first = new Date(year, month, 1);
@@ -220,64 +521,75 @@ function MonthCalendar({ records, currentDate, onSelectDate, theme, monthCursor,
   const weekdays = ["일", "월", "화", "수", "목", "금", "토"];
 
   return (
-    <div className={`rounded-3xl p-5 shadow-sm ${cardClass(theme)}`}>
-      <div className="mb-4 flex items-center justify-between gap-3">
-        <div className="text-xl font-semibold">달력 기록</div>
-        <div className="flex items-center gap-2">
+    <div className="card">
+      <div className="card-head calendar-head">
+        <div className="card-title">달력 기록</div>
+        <div className="calendar-nav">
           <BaseButton
+            className="icon-btn"
             onClick={() => setMonthCursor(new Date(year, month - 1, 1))}
-            className={`h-10 w-10 rounded-xl border p-0 ${theme === "night" ? "border-[#4a4d69] bg-[#232537]" : "border-slate-200 bg-white"}`}
           >
-            <ChevronLeft className="h-4 w-4" />
+            <ChevronLeft size={18} />
           </BaseButton>
-          <div className="min-w-24 text-center text-sm font-medium">{year}년 {month + 1}월</div>
+          <div className="calendar-label">
+            {year}년 {month + 1}월
+          </div>
           <BaseButton
+            className="icon-btn"
             onClick={() => setMonthCursor(new Date(year, month + 1, 1))}
-            className={`h-10 w-10 rounded-xl border p-0 ${theme === "night" ? "border-[#4a4d69] bg-[#232537]" : "border-slate-200 bg-white"}`}
           >
-            <ChevronRight className="h-4 w-4" />
+            <ChevronRight size={18} />
           </BaseButton>
         </div>
       </div>
 
-      <div className="mb-2 grid grid-cols-7 gap-2 text-center">
-        {weekdays.map((w) => <div key={w} className={`text-xs font-medium ${mutedClass(theme)}`}>{w}</div>)}
+      <div className="weekday-grid">
+        {weekdays.map((w) => (
+          <div key={w} className="weekday">
+            {w}
+          </div>
+        ))}
       </div>
 
-      <div className="grid grid-cols-7 gap-2">
+      <div className="calendar-grid">
         {cells.map((dateObj, idx) => {
-          if (!dateObj) return <div key={`empty-${idx}`} className="aspect-square rounded-xl" />;
+          if (!dateObj) return <div key={`empty-${idx}`} className="calendar-empty" />;
+
           const dateKey = ymd(dateObj);
           const count = (records[dateKey] || []).length;
           const isSelected = dateKey === currentDate;
+
           return (
             <button
               key={dateKey}
               type="button"
               onClick={() => onSelectDate(dateKey)}
-              className={`aspect-square rounded-2xl border text-sm font-medium flex flex-col items-center justify-center gap-1 ${
-                isSelected
-                  ? theme === "night"
-                    ? "bg-[#2f3248] border-[#c8c3d9]"
-                    : "bg-black/5 border-slate-300"
-                  : theme === "night"
-                    ? "bg-[#232537] border-[#3a3d57]"
-                    : "bg-white border-slate-200"
-              }`}
+              className={`calendar-day ${isSelected ? "selected" : ""}`}
             >
               <span>{dateObj.getDate()}</span>
-              <span className={`text-[10px] leading-none ${count > 0 ? "text-emerald-600" : "opacity-0"}`}>{count}개</span>
+              <span className={`day-count ${count > 0 ? "visible" : ""}`}>{count}개</span>
             </button>
           );
         })}
       </div>
 
-      <div className={`mt-3 text-xs ${mutedClass(theme)}`}>기록이 있는 날은 개수로 표시돼. 날짜를 누르면 그날의 마음을 다시 볼 수 있어.</div>
+      <div className="helper-text">
+        작성한 날은 개수로 보여줘요. 날짜를 누르면 그날의 기록을 볼 수 있어요.
+      </div>
     </div>
   );
 }
 
-function EntryList({ entries, selectedEntryId, onSelect, onCreate, onDelete, onCopy, onRename, theme, currentDate }) {
+function EntryList({
+  entries,
+  selectedEntryId,
+  onSelect,
+  onCreate,
+  onDelete,
+  onCopy,
+  onRename,
+  currentDate,
+}) {
   const [editingKey, setEditingKey] = useState("");
   const [editingTitle, setEditingTitle] = useState("");
 
@@ -289,85 +601,92 @@ function EntryList({ entries, selectedEntryId, onSelect, onCreate, onDelete, onC
   }, [entries, editingKey]);
 
   return (
-    <div className={`rounded-3xl p-5 shadow-sm ${cardClass(theme)}`}>
-      <div className="mb-4 flex items-center justify-between gap-3">
-        <div className="text-xl font-semibold">{currentDate} 기록</div>
-        <BaseButton onClick={onCreate} className="bg-slate-900 text-white">
-          <Plus className="mr-1 h-4 w-4" />새 기록
+    <div className="card">
+      <div className="card-head">
+        <div className="card-title">{currentDate} 기록</div>
+        <BaseButton className="primary-btn" onClick={onCreate}>
+          <Plus size={16} />
+          추가
         </BaseButton>
       </div>
 
-      <div className="space-y-2">
+      <div className="entry-list">
         {entries.length === 0 ? (
-          <div className={`text-sm ${mutedClass(theme)}`}>이 날에는 아직 적어둔 마음이 없어.</div>
+          <div className="helper-text">이 날짜에는 아직 기록이 없어요.</div>
         ) : (
           entries.map((entry, idx) => {
             const itemKey = `${entry.id}::${idx}`;
             const isEditing = editingKey === itemKey;
+            const isSelected = selectedEntryId === entry.id;
+
             return (
               <div
                 key={`${entry.id}-${idx}`}
-                className={`rounded-2xl border px-3 py-3 flex items-center justify-between gap-3 ${
-                  selectedEntryId === entry.id
-                    ? theme === "night"
-                      ? "border-[#c8c3d9] bg-[#2a2d44]"
-                      : "border-slate-300 bg-slate-50"
-                    : cardClass(theme)
-                }`}
+                className={`entry-item ${isSelected ? "active" : ""}`}
               >
-                <div className="min-w-0 flex-1">
+                <div className="entry-main">
                   {isEditing ? (
-                    <div className="space-y-2">
+                    <div className="entry-edit">
                       <BaseInput
                         value={editingTitle}
                         onChange={(e) => setEditingTitle(e.target.value)}
-                        className={fieldClass(theme)}
                         autoFocus
                       />
-                      <div className="flex gap-2">
+                      <div className="row-btns">
                         <BaseButton
+                          className="primary-btn small-btn"
                           onClick={() => {
                             onRename(entry, editingTitle, idx);
                             setEditingKey("");
                             setEditingTitle("");
                           }}
-                          className="bg-slate-900 text-white"
                         >
                           완료
                         </BaseButton>
                         <BaseButton
+                          className="outline-btn small-btn"
                           onClick={() => {
                             setEditingKey("");
                             setEditingTitle("");
                           }}
-                          className="border border-slate-200 bg-white"
                         >
                           취소
                         </BaseButton>
                       </div>
                     </div>
                   ) : (
-                    <button type="button" onClick={() => onSelect(entry.id)} className="w-full text-left">
-                      <div className="truncate font-medium">{entry.title?.trim() || `${idx + 1}번째 기록`}</div>
-                      <div className={`text-xs ${mutedClass(theme)}`}>{entry.timeLabel || "시간 미지정"}</div>
+                    <button
+                      type="button"
+                      onClick={() => onSelect(entry.id)}
+                      className="entry-select"
+                    >
+                      <div className="entry-title">
+                        {entry.title?.trim() || `${idx + 1}번째 기록`}
+                      </div>
+                      <div className="entry-time">{entry.timeLabel || "시간 미지정"}</div>
                     </button>
                   )}
                 </div>
 
                 {!isEditing ? (
-                  <div className="flex shrink-0 items-center gap-1">
+                  <div className="entry-actions">
                     <BaseButton
+                      className="outline-btn tiny-btn"
                       onClick={() => {
                         setEditingKey((prev) => (prev === itemKey ? "" : itemKey));
                         setEditingTitle(entry.title || "");
                       }}
-                      className="border border-slate-200 bg-white px-3 py-1 text-xs"
                     >
-                      수정
+                      <Pencil size={14} />
                     </BaseButton>
-                    <BaseButton onClick={() => onCopy(entry)} className="px-3 py-1 text-sm">복사</BaseButton>
-                    <BaseButton onClick={() => onDelete(entry.id)} className="px-2 py-1 text-red-600">
-                      <Trash2 className="h-4 w-4" />
+                    <BaseButton className="ghost-btn tiny-btn" onClick={() => onCopy(entry)}>
+                      복사
+                    </BaseButton>
+                    <BaseButton
+                      className="ghost-btn tiny-btn danger"
+                      onClick={() => onDelete(entry.id)}
+                    >
+                      <Trash2 size={16} />
                     </BaseButton>
                   </div>
                 ) : null}
@@ -380,38 +699,52 @@ function EntryList({ entries, selectedEntryId, onSelect, onCreate, onDelete, onC
   );
 }
 
-function SectionCard({ title, children, subtitle, theme }) {
+function SectionCard({ title, children, subtitle }) {
   return (
-    <div className={`rounded-3xl p-5 shadow-sm ${cardClass(theme)}`}>
-      <div className="mb-3">
-        <div className="text-xl font-semibold">{title}</div>
-        {subtitle ? <p className={`mt-1 text-sm leading-6 ${mutedClass(theme)}`}>{subtitle}</p> : null}
+    <div className="card">
+      <div className="card-head column">
+        <div className="card-title">{title}</div>
+        {subtitle ? <p className="card-subtitle">{subtitle}</p> : null}
       </div>
       {children}
     </div>
   );
 }
 
-function CollapsibleGroup({ title, items, selected, onToggle, defaultOpen = false, theme }) {
-  const [open, setOpen] = useState(defaultOpen);
+function CollapsibleGroup({ title, items, selected, onToggle, open, onToggleOpen }) {  const selectedCount = items.filter((item) => selected.includes(item)).length;
   return (
-    <div className={`overflow-hidden rounded-2xl border ${theme === "night" ? "border-[#3a3d57] bg-[#232537]" : "border-slate-200 bg-white"}`}>
-      <button type="button" onClick={() => setOpen((v) => !v)} className="flex w-full items-center justify-between px-4 py-4 text-left">
+    <div className="collapse">
+      <button
+        type="button"
+        className="collapse-head"
+        onClick={onToggleOpen}
+      >
         <div>
-          <div className={`text-base font-semibold ${theme === "night" ? "text-[#f7f4ee]" : "text-slate-900"}`}>{title}</div>
-          <div className={`text-sm ${mutedClass(theme)}`}>{open ? "접어둘래" : "천천히 펼쳐볼래"}</div>
+          <div className="collapse-title">
+  {title}
+  {selectedCount > 0 ? ` (${selectedCount})` : ""}
+</div>
+          <div className="collapse-sub">{open ? "접기" : "눌러서 펼치기"}</div>
         </div>
-        {open ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
+        {open ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
       </button>
 
       {open ? (
-        <div className="grid grid-cols-1 gap-3 px-4 pb-4 md:grid-cols-2">
+        <div className="collapse-body">
           {items.map((item) => {
             const id = `${title}-${item}`;
             return (
-              <label key={item} htmlFor={id} className={`flex cursor-pointer items-start gap-3 rounded-2xl border p-3 ${theme === "night" ? "border-[#3a3d57] hover:bg-[#2a2d44]" : "border-slate-200 hover:bg-slate-50"}`}>
-                <BaseCheckbox id={id} checked={selected.includes(item)} onChange={() => onToggle(item)} />
-                <span className="text-[15px] leading-6">{item}</span>
+              <label key={item} htmlFor={id} className="check-item">
+                <BaseCheckbox
+                  id={id}
+                  checked={selected.includes(item)}
+                  onChange={() => onToggle(item)}
+                />
+                <span>
+  {EMOTION_EMOJI[item] || POSITIVE_EMOJI[item]
+    ? `${EMOTION_EMOJI[item] || POSITIVE_EMOJI[item]} ${item}`
+    : item}
+</span>
               </label>
             );
           })}
@@ -420,68 +753,83 @@ function CollapsibleGroup({ title, items, selected, onToggle, defaultOpen = fals
     </div>
   );
 }
-function IntroModal({ theme, open, onClose }) {
+function IntroModal({ open, onClose }) {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 px-4">
-      <div className={`w-full max-w-md rounded-3xl p-6 shadow-xl ${cardClass(theme)}`}>
-        <div className="mb-4">
-          <div className="text-xl font-semibold">처음 사용하기 전에</div>
-          <p className={`mt-2 text-sm leading-6 ${mutedClass(theme)}`}>
-            편하게 시작할 수 있도록 꼭 알아두면 좋은 점만 적어뒀어.
-          </p>
+    <div className="modal-overlay">
+      <div className="modal-box">
+
+        <div className="modal-title">처음 사용하기 전에</div>
+        <div className="modal-text">
+          편하게 사용할 수 있도록 몇 가지만 알려줄게요.
         </div>
 
-        <div className="space-y-3 text-sm">
-          <div>
-            <b>기록 저장 방식</b>
-            <p className={mutedClass(theme)}>
-              기록은 이 브라우저에만 저장돼. 기기를 바꾸거나 브라우저 데이터를 지우면 사라질 수 있어.
-            </p>
-          </div>
-
-          <div>
-            <b>기록 보관</b>
-            <p className={mutedClass(theme)}>
-              각 기록 오른쪽의 <b>복사</b> 버튼으로 내용을 복사할 수 있어. 중요한 기록은 따로 보관해두는 걸 권장해.
-            </p>
-          </div>
-
-          <div>
-            <b>알아둘 점</b>
-            <p className={mutedClass(theme)}>
-              이 앱은 감정 정리 도구야. 상담이나 치료를 대신하지 않아.
-            </p>
-          </div>
+        <div className="modal-section">
+          <b>기록 저장 방식</b>
+          <p>기록은 이 브라우저에만 저장돼요.</p>
+          <p>기기를 바꾸거나 브라우저 데이터를 지우면 사라질 수 있어요.</p>
         </div>
 
-        <div className="mt-6">
-          <BaseButton onClick={onClose} className="w-full bg-slate-900 text-white">
-            확인했어
-          </BaseButton>
+        <div className="modal-section">
+          <b>기록 보관</b>
+          <p>각 기록의 <b>복사</b> 버튼으로 내용을 복사할 수 있어요.</p>
+          <p>중요한 기록은 따로 보관해두는 것을 추천해요.</p>
         </div>
+
+        <div className="modal-section">
+          <b>알아둘 점</b>
+          <p>이 앱은 마음을 정리하기 위한 기록 도구예요.</p>
+          <p>상담이나 치료를 대신하지 않아요.</p>
+        </div>
+
+        <button className="btn primary-btn" onClick={onClose}>
+          확인했어요
+        </button>
+
       </div>
     </div>
   );
 }
 export default function App() {
-  const [theme, setTheme] = useState(() => localStorage.getItem(THEME_KEY) || "cream");
+  const [theme, setTheme] = useState(
+    () => localStorage.getItem(THEME_KEY) || "lavender"
+  );
   const [records, setRecords] = useState(() => readRecords());
-  const [currentDate, setCurrentDate] = useState(() => readUi().currentDate || todayString());
-  const [showIntro, setShowIntro] = useState(() => {
-  return localStorage.getItem("nawa-intro-seen") !== "yes";
-});
-  const [selectedEntryId, setSelectedEntryId] = useState(() => readUi().selectedEntryId || "");
+  const [currentDate, setCurrentDate] = useState(
+    () => readUi().currentDate || todayString()
+  );
+  const [selectedEntryId, setSelectedEntryId] = useState(
+    () => readUi().selectedEntryId || ""
+  );
   const [entry, setEntry] = useState(emptyEntry(todayString()));
   const [savedMessage, setSavedMessage] = useState("");
   const [copyMessage, setCopyMessage] = useState("");
   const copyMessageTimer = useRef(null);
   const [isSaving, setIsSaving] = useState(false);
-  const [monthCursor, setMonthCursor] = useState(parseYmd(readUi().currentDate || todayString()));
+  const [showIntro, setShowIntro] = useState(() => {
+  return localStorage.getItem("nawa-intro-seen") !== "yes";
+});
+  const [monthCursor, setMonthCursor] = useState(
+    parseYmd(readUi().currentDate || todayString())
+  );
   const saveTimer = useRef(null);
-
+  const [showEmotionSummary, setShowEmotionSummary] = useState(false);
+  const [showNeedsSummary, setShowNeedsSummary] = useState(false);
+  const [showEmpathyEmotionSummary, setShowEmpathyEmotionSummary] = useState(false);
+  const [showNeedsSummaryBox, setShowNeedsSummaryBox] = useState(false);
+  const [openEmotionGroup, setOpenEmotionGroup] = useState("fear");
+  const [openPositiveGroup, setOpenPositiveGroup] = useState("gratitude");
+  const [openNeedGroup, setOpenNeedGroup] = useState("");
   const dayEntries = useMemo(() => records[currentDate] || [], [records, currentDate]);
+  const selectedEmotions = entry.negative?.join(" · ") || "";
+
+const selectedNeeds = [
+  ...(entry.needs || []),
+  ...(entry.needsOtherChecked && entry.needsOtherText?.trim()
+    ? [entry.needsOtherText.trim()]
+    : []),
+].join(" · ");
 
   useEffect(() => {
     localStorage.setItem(THEME_KEY, theme);
@@ -494,38 +842,55 @@ export default function App() {
 
   useEffect(() => {
     const entries = records[currentDate] || [];
+
     if (entries.length === 0) {
       const newEntry = emptyEntry(currentDate);
       setSelectedEntryId(newEntry.id);
       setEntry(newEntry);
       return;
     }
+
     const target = entries.find((e) => e.id === selectedEntryId) || entries[0];
     setSelectedEntryId(target.id);
-    if (JSON.stringify(target) !== JSON.stringify(entry)) setEntry(target);
+
+    if (JSON.stringify(target) !== JSON.stringify(entry)) {
+      setEntry(target);
+    }
   }, [currentDate, records]);
 
   useEffect(() => {
     if (!selectedEntryId) return;
+
     const day = records[entry.date] || [];
     const prev = day.find((e) => e.id === selectedEntryId);
     if (prev && JSON.stringify(prev) === JSON.stringify(entry)) return;
 
     if (saveTimer.current) clearTimeout(saveTimer.current);
+
     saveTimer.current = setTimeout(() => {
       setRecords((old) => {
         const currentDay = old[entry.date] || [];
         const exists = currentDay.some((e) => e.id === selectedEntryId);
+
         const nextDay = exists
-          ? currentDay.map((e) => (e.id === selectedEntryId ? { ...entry, updatedAt: new Date().toISOString() } : e))
+          ? currentDay.map((e) =>
+              e.id === selectedEntryId
+                ? { ...entry, updatedAt: new Date().toISOString() }
+                : e
+            )
           : [...currentDay, { ...entry, updatedAt: new Date().toISOString() }];
+
         const next = { ...old, [entry.date]: nextDay };
         saveRecords(next);
         return next;
       });
-      setSavedMessage("살포시 저장됐어");
-      window.clearTimeout(window.__nawaSaveMessageTimer);
-      window.__nawaSaveMessageTimer = window.setTimeout(() => setSavedMessage(""), 800);
+
+      setSavedMessage("자동 저장됨");
+      window.clearTimeout(window.__nawaPrayerSaveMessageTimer);
+      window.__nawaPrayerSaveMessageTimer = window.setTimeout(
+        () => setSavedMessage(""),
+        900
+      );
     }, 900);
 
     return () => {
@@ -533,7 +898,12 @@ export default function App() {
     };
   }, [entry, selectedEntryId, records]);
 
-  const updateEntry = (patch) => setEntry((prev) => ({ ...prev, ...patch, updatedAt: new Date().toISOString() }));
+  const updateEntry = (patch) =>
+    setEntry((prev) => ({
+      ...prev,
+      ...patch,
+      updatedAt: new Date().toISOString(),
+    }));
 
   const createEntryForDate = (date = currentDate) => {
     const newEntry = emptyEntry(date);
@@ -546,6 +916,7 @@ export default function App() {
     const day = records[currentDate] || [];
     const nextDay = day.filter((e) => e.id !== id);
     const nextRecords = { ...records, [currentDate]: nextDay };
+
     setRecords(nextRecords);
     saveRecords(nextRecords);
 
@@ -562,42 +933,38 @@ export default function App() {
   };
 
   const handleCopyEntry = async (targetEntry) => {
-    const needsList = [
-      ...(targetEntry.needs || []),
-      ...(targetEntry.needsOtherChecked && targetEntry.needsOtherText?.trim() ? [targetEntry.needsOtherText.trim()] : []),
-    ];
-
     const text = `제목: ${targetEntry.title || ""}
 날짜: ${targetEntry.date} ${targetEntry.timeLabel || ""}
 
-그때 들었던 감정:
+부정적 감정:
 ${(targetEntry.negative || []).join(", ") || ""}
 
-무슨 일이 있었나:
+어떤 일이 있었을까:
 ${targetEntry.reason || ""}
 
-그래서 그런 감정이 들었구나:
+그래서 그런 마음이 들었구나:
 ${targetEntry.empathy || ""}
 
-바랐던 것 / 필요했던 것:
-${needsList.join(", ") || ""}
+마음속에서는 무엇을 바랐을까:
+${(targetEntry.needs || []).join(", ") || ""}
+${targetEntry.needsOtherChecked ? `기타: ${targetEntry.needsOtherText || ""}` : ""}
 
-그렇구나~
+그렇구나:
 ${targetEntry.needsEmpathy || ""}
 
-내가 하고 싶은 말:
+마음속에 있던 말:
 ${targetEntry.message || ""}
 
-나에게 해주고 싶은 말:
+지금의 나에게 어떤 말을 해주고 싶어:
 ${targetEntry.selfMessage || ""}
-
-할 수 있는 것:
-${targetEntry.canDo || ""}
 
 할 수 없는 것:
 ${targetEntry.cannotDo || ""}
 
-지금 느끼는 감정:
+할 수 있는 것:
+${targetEntry.canDo || ""}
+
+지금 마음은 어때:
 ${(targetEntry.positive || []).join(", ") || ""}`;
 
     try {
@@ -614,71 +981,123 @@ ${(targetEntry.positive || []).join(", ") || ""}`;
         document.execCommand("copy");
         document.body.removeChild(textarea);
       }
+
       if (copyMessageTimer.current) clearTimeout(copyMessageTimer.current);
-      setCopyMessage("복사됐어");
+      setCopyMessage("복사완료");
       copyMessageTimer.current = setTimeout(() => setCopyMessage(""), 1500);
     } catch {
       if (copyMessageTimer.current) clearTimeout(copyMessageTimer.current);
-      setCopyMessage("복사에 실패했어");
+      setCopyMessage("복사 실패");
       copyMessageTimer.current = setTimeout(() => setCopyMessage(""), 1500);
     }
   };
 
+  const handleExportBackup = () => {
+    try {
+      const backupData = {
+        records,
+        currentDate,
+        selectedEntryId,
+        theme,
+      };
+
+      const blob = new Blob([JSON.stringify(backupData, null, 2)], {
+        type: "application/json",
+      });
+
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "maeum-backup.json";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      setSavedMessage("백업 파일 저장됨");
+      setTimeout(() => setSavedMessage(""), 1500);
+    } catch {
+      setSavedMessage("백업 실패");
+      setTimeout(() => setSavedMessage(""), 1500);
+    }
+  };
+
+  const handleImportBackup = (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      try {
+        const data = JSON.parse(e.target.result);
+        if (!data.records) throw new Error();
+
+        const normalized = normalizeRecords(data.records);
+        setRecords(normalized);
+        saveRecords(normalized);
+
+        if (data.currentDate) setCurrentDate(data.currentDate);
+        if (data.selectedEntryId) setSelectedEntryId(data.selectedEntryId);
+        if (data.theme) setTheme(data.theme);
+
+        setSavedMessage("백업 복원 완료");
+        setTimeout(() => setSavedMessage(""), 1500);
+      } catch {
+        setSavedMessage("백업 파일 오류");
+        setTimeout(() => setSavedMessage(""), 1500);
+      }
+    };
+
+    reader.readAsText(file);
+    event.target.value = "";
+  };
+
   return (
-    <div className={`${themeClass(theme)} p-3 sm:p-4 md:p-6`}>
+    <div className={appThemeClass(theme)}>
       <IntroModal
-  theme={theme}
-  open={showIntro}
-  onClose={() => {
-    setShowIntro(false);
-    localStorage.setItem("nawa-intro-seen", "yes");
-  }}
-/>
-      <div className="mx-auto grid max-w-6xl grid-cols-1 gap-5 xl:grid-cols-[380px_minmax(0,1fr)]">
-        <div className="space-y-5 xl:sticky xl:top-6 xl:self-start">
-          <div className={`rounded-3xl p-5 shadow-sm ${heroClass(theme)}`}>
-            <div className="mb-4 flex items-start justify-between gap-3">
-              <div>
-                <div className={`flex items-center gap-2 ${accentClass(theme)}`}>
-                  <Sparkles className="h-5 w-5" />
-                  <div className="text-2xl font-semibold">나와의 대화</div>
-                </div>
-                <p className={`mt-1 text-sm ${mutedClass(theme)}`}>마음을 천천히 적어둘 수 있는 작은 기록장</p>
+      open={showIntro}
+      onClose={() => {
+        setShowIntro(false);
+        localStorage.setItem("nawa-intro-seen", "yes");
+      }}
+    />
+
+      <div className="page-wrap">
+        <div className="left-col">
+          <div className="card hero-card">
+            <div className="hero-title-row">
+              <div className="hero-title">
+                <Sparkles size={22} />
+                <span>나와의 대화</span>
               </div>
             </div>
 
-            <div>
-              <div className={`text-sm ${mutedClass(theme)}`}>기록은 이 브라우저에 저장돼</div>
-              <div className={`mt-2 text-xs leading-6 ${mutedClass(theme)}`}>중요한 기록은 복사해서 따로 보관해두면 좋아. 링크를 같이 써도 기록은 각자 기기 안에 남아.</div>
+            <p className="hero-subtitle">오늘의 마음을 천천히 들어보는 시간</p>
+
+            <div className="hero-copy">
+              <div>기록은 이 브라우저에 저장돼요</div>
+              <div className="muted-line">
+                중요한 기록은 복사해서 따로 보관해두면 좋아요
+              </div>
             </div>
 
             {copyMessage ? (
-              <div className="fixed bottom-24 left-1/2 z-50 -translate-x-1/2 rounded-xl bg-black px-4 py-2 text-sm text-white shadow-lg">
-                {copyMessage}
-              </div>
+              <div className="toast">{copyMessage}</div>
             ) : savedMessage ? (
-              <div className={`mt-4 text-sm ${mutedClass(theme)}`}>{savedMessage}</div>
+              <div className="saved-text">{savedMessage}</div>
             ) : null}
           </div>
 
-          <div className={`rounded-3xl p-4 shadow-sm ${cardClass(theme)}`}>
-            <div className="mb-3">
-              <div className="text-base font-semibold">테마</div>
-              <div className={`mt-1 text-xs ${mutedClass(theme)}`}>오늘 마음에 잘 어울리는 분위기로 골라봐.</div>
-            </div>
-            <div className="grid grid-cols-2 gap-2">
+          <div className="card">
+            <div className="card-title">테마</div>
+            <div className="theme-grid">
               {THEMES.map((item) => (
                 <button
                   key={item.key}
                   type="button"
                   onClick={() => setTheme(item.key)}
-                  className={`rounded-xl border px-3 py-3 text-sm transition ${
-                    theme === item.key
-                      ? item.key === "night"
-                        ? "border-[#4a4d69] bg-[#2f3248] text-[#f7f4ee] shadow-sm"
-                        : "border-[#d9c6b0] bg-white shadow-sm"
-                      : "border-slate-200 opacity-80"
-                  }`}
+                  className={`theme-chip ${theme === item.key ? "active" : ""}`}
                 >
                   {item.label}
                 </button>
@@ -686,11 +1105,33 @@ ${(targetEntry.positive || []).join(", ") || ""}`;
             </div>
           </div>
 
+          <div className="card">
+            <div className="card-title">백업</div>
+            <div className="card-subtitle">
+              기기 변경 전에 백업 파일을 저장해두면 다시 불러올 수 있어요.
+            </div>
+
+            <div className="row-btns" style={{ marginTop: 12, flexWrap: "wrap" }}>
+              <BaseButton className="outline-btn" onClick={handleExportBackup}>
+                백업 다운로드
+              </BaseButton>
+
+              <label className="outline-btn" style={{ cursor: "pointer" }}>
+                백업 복원
+                <input
+                  type="file"
+                  accept="application/json"
+                  onChange={handleImportBackup}
+                  style={{ display: "none" }}
+                />
+              </label>
+            </div>
+          </div>
+
           <MonthCalendar
             records={records}
             currentDate={currentDate}
             onSelectDate={setCurrentDate}
-            theme={theme}
             monthCursor={monthCursor}
             setMonthCursor={setMonthCursor}
           />
@@ -707,163 +1148,348 @@ ${(targetEntry.positive || []).join(", ") || ""}`;
                 const day = old[targetEntry.date] || [];
                 const nextDay = day.map((item, i) => {
                   if (i !== idx) return item;
-                  return { ...item, title: nextTitle, updatedAt: new Date().toISOString() };
+                  return {
+                    ...item,
+                    title: nextTitle,
+                    updatedAt: new Date().toISOString(),
+                  };
                 });
+
                 const next = { ...old, [targetEntry.date]: nextDay };
                 saveRecords(next);
                 return next;
               });
+
               if (selectedEntryId === targetEntry.id) {
-                setEntry((prev) => ({ ...prev, title: nextTitle, updatedAt: new Date().toISOString() }));
+                setEntry((prev) => ({
+                  ...prev,
+                  title: nextTitle,
+                  updatedAt: new Date().toISOString(),
+                }));
               }
-              setSavedMessage("제목을 살짝 고쳐뒀어");
+
+              setSavedMessage("제목 수정 완료");
               setTimeout(() => setSavedMessage(""), 1200);
             }}
-            theme={theme}
             currentDate={currentDate}
           />
         </div>
 
-        <div className="min-w-0 space-y-5 pb-24 md:pb-6">
-          
-          <SectionCard title="▶ 오늘의 기록 제목" subtitle="하루에 여러 번 적을 수도 있으니까, 나중에 보기 편한 이름을 붙여줘." theme={theme}>
+        <div className="right-col">
+          <SectionCard title="✨ 오늘의 마음" subtitle="지금의 마음에 작은 이름을 붙여볼까">
             <BaseInput
               value={entry.title}
               onChange={(e) => updateEntry({ title: e.target.value })}
-              placeholder="예: 아침에 들었던 마음"
-              className={fieldClass(theme)}
+              placeholder="예: 오늘의 마음"
             />
           </SectionCard>
 
-          <SectionCard title="▶ 지금 어떤 마음이 들어?" subtitle="마음이 닿는 감정을 천천히 골라봐." theme={theme}>
-            <div className="space-y-3">
-              {NEGATIVE_GROUPS.map((group, idx) => (
-                <CollapsibleGroup
-                  key={group.key}
-                  title={group.title}
-                  items={group.items}
-                  selected={entry.negative}
-                  onToggle={(item) => updateEntry({ negative: toggleInList(entry.negative, item) })}
-                  defaultOpen={idx === 0}
-                  theme={theme}
-                />
-              ))}
+          <SectionCard
+            title="💭 지금 마음이 어때"
+            subtitle="지금 느껴지는 감정을 골라보자"
+          >
+            <div className="stack">
+              {NEGATIVE_GROUPS.map((group) => (
+  <CollapsibleGroup
+    key={group.key}
+    title={group.title}
+    items={group.items}
+    selected={entry.negative}
+    onToggle={(item) =>
+      updateEntry({ negative: toggleInList(entry.negative, item) })
+    }
+    open={openEmotionGroup === group.key}
+    onToggleOpen={() =>
+      setOpenEmotionGroup((prev) => (prev === group.key ? "" : group.key))
+    }
+  />
+))}
             </div>
           </SectionCard>
+          
+<SectionCard
+  title="🌿 어떤 일이 있었을까"
+  subtitle={`내 마음이 이렇게 느낀 이유를
+천천히 적어보자`}
+>
+  {entry.negative?.length > 0 && (
+    <div className="summary-chip-box">
+      <div className="summary-chip-head">
+        <div className="summary-chip-title">
+          💭 선택한 감정 ({entry.negative.length}개)
+        </div>
 
-          <SectionCard title="▶ 무슨 일이 있었을까?" subtitle="천천히 떠오르는 만큼만 적어도 괜찮아." theme={theme}>
-            <BaseTextarea value={entry.reason} onChange={(e) => updateEntry({ reason: e.target.value })} className={`${fieldClass(theme)} min-h-40`} />
-          </SectionCard>
+        <button
+          type="button"
+          className="summary-toggle-btn"
+          onClick={() => setShowEmotionSummary((prev) => !prev)}
+        >
+          {showEmotionSummary ? "접기" : "펼치기"}
+        </button>
+      </div>
 
-          <SectionCard title="▶ 그래서 그런 감정이 들었구나" subtitle="그랬다면 충분히 그럴 수 있었겠다고, 마음을 한번 다정하게 바라봐." theme={theme}>
-            <BaseTextarea value={entry.empathy} onChange={(e) => updateEntry({ empathy: e.target.value })} className={`${fieldClass(theme)} min-h-36`} />
-          </SectionCard>
+      <div
+        className={`emotion-chip-wrap ${
+          showEmotionSummary ? "expanded" : "collapsed"
+        }`}
+      >
+        {entry.negative.map((emotion) => (
+          <span key={emotion} className="emotion-chip">
+            {EMOTION_EMOJI[emotion] || "💭"} {emotion}
+          </span>
+        ))}
+      </div>
+    </div>
+  )}
 
-          <SectionCard title="▶ 그때 내가 바랐던 건 뭐였을까?" subtitle="상대에게서, 혹은 나 자신에게서 바랐던 걸 골라봐." theme={theme}>
-            <div className="space-y-3">
-              {NEED_GROUPS.map((group) => (
-                <CollapsibleGroup
-                  key={group.key}
-                  title={group.title}
-                  items={group.items}
-                  selected={entry.needs}
-                  onToggle={(item) => updateEntry({ needs: toggleInList(entry.needs, item) })}
-                  theme={theme}
-                />
-              ))}
-              <div className={`rounded-2xl border p-4 space-y-3 ${cardClass(theme)}`}>
-                <div className="font-semibold">기타</div>
-                <label className="flex items-center gap-3">
-                  <BaseCheckbox checked={entry.needsOtherChecked} onChange={() => updateEntry({ needsOtherChecked: !entry.needsOtherChecked })} />
-                  <span>직접 적어볼래</span>
+  <BaseTextarea
+    value={entry.reason}
+    onChange={(e) => updateEntry({ reason: e.target.value })}
+  />
+</SectionCard>
+
+<SectionCard
+  title="🤍 그래서 그런 마음이 들었구나"
+  subtitle={`그럴 수 있어
+그 상황이라면 누구라도 그렇게 느낄 수 있어
+
+예: 친구가 연락이 안 되어서
+괜히 마음이 쓰이고 걱정이 되었구나`}
+>
+  {entry.negative?.length > 0 && (
+    <div className="summary-chip-box">
+      <div className="summary-chip-head">
+        <div className="summary-chip-title">
+          💭 선택한 감정 ({entry.negative.length}개)
+        </div>
+
+        <button
+          type="button"
+          className="summary-toggle-btn"
+          onClick={() => setShowEmpathyEmotionSummary((prev) => !prev)}
+        >
+          {showEmpathyEmotionSummary ? "접기" : "펼치기"}
+        </button>
+      </div>
+
+      <div
+        className={`emotion-chip-wrap ${
+          showEmpathyEmotionSummary ? "expanded" : "collapsed"
+        }`}
+      >
+        {entry.negative.map((emotion) => (
+          <span key={emotion} className="emotion-chip">
+            {EMOTION_EMOJI[emotion] || "💭"} {emotion}
+          </span>
+        ))}
+      </div>
+    </div>
+  )}
+
+  <BaseTextarea
+    value={entry.empathy}
+    onChange={(e) => updateEntry({ empathy: e.target.value })}
+  />
+</SectionCard> 
+
+          <SectionCard
+            title="🌱 마음속에서는 무엇을 바랐을까"
+            subtitle={`그 순간
+내 마음은 무엇을 바라보고 있었을까`}
+          >
+            <div className="stack">
+{NEED_GROUPS.map((group) => (
+  <CollapsibleGroup
+    key={group.key}
+    title={group.title}
+    items={group.items}
+    selected={entry.needs}
+    onToggle={(item) =>
+      updateEntry({ needs: toggleInList(entry.needs, item) })
+    }
+    open={openNeedGroup === group.key}
+    onToggleOpen={() =>
+      setOpenNeedGroup((prev) => (prev === group.key ? "" : group.key))
+    }
+  />
+))}
+              <div className="inner-box">
+                <div className="inner-title">기타</div>
+
+                <label className="inline-check">
+                  <BaseCheckbox
+                    checked={entry.needsOtherChecked}
+                    onChange={() =>
+                      updateEntry({
+                        needsOtherChecked: !entry.needsOtherChecked,
+                      })
+                    }
+                  />
+                  <span>직접 적기</span>
                 </label>
+
                 <BaseInput
                   value={entry.needsOtherText}
                   onChange={(e) => updateEntry({ needsOtherText: e.target.value })}
-                  placeholder="떠오르는 바람이나 필요를 적어줘"
-                  className={fieldClass(theme)}
+                  placeholder="떠오르는 마음을 적어보자"
                 />
               </div>
             </div>
           </SectionCard>
 
+<SectionCard
+  title="🍃 그렇구나"
+  subtitle={`그 마음이 채워지지 않아서
+속상했겠구나
+
+예: 친구가 연락을 해주기를 바랐는데
+그렇지 않아서 서운했구나`}
+>
+  {(entry.needs?.length > 0 || entry.needsOtherText?.trim()) && (
+    <div className="summary-chip-box">
+      <div className="summary-chip-head">
+        <div className="summary-chip-title">
+          🌱 내가 바랐던 것 ({(entry.needs?.length || 0) + (entry.needsOtherText?.trim() ? 1 : 0)}개)
+        </div>
+
+        <button
+          type="button"
+          className="summary-toggle-btn"
+          onClick={() => setShowNeedsSummaryBox((prev) => !prev)}
+        >
+          {showNeedsSummaryBox ? "접기" : "펼치기"}
+        </button>
+      </div>
+
+      <div
+        className={`emotion-chip-wrap ${
+          showNeedsSummaryBox ? "expanded" : "collapsed"
+        }`}
+      >
+        {(entry.needs || []).map((need) => (
+          <span key={need} className="emotion-chip">
+            {need}
+          </span>
+        ))}
+
+        {entry.needsOtherText?.trim() && (
+          <span className="emotion-chip">
+            {entry.needsOtherText.trim()}
+          </span>
+        )}
+      </div>
+    </div>
+  )}
+
+  <BaseTextarea
+    value={entry.needsEmpathy}
+    onChange={(e) => updateEntry({ needsEmpathy: e.target.value })}
+    placeholder="그 마음을 다정하게 바라봐주자"
+  />
+</SectionCard>
+
           <SectionCard
-            title="▶️ 그렇구나~"
-            subtitle="욕구가 채워지지 않아서 더 속상했을 수도 있어. 그 마음을 한 번 더 다정하게 안아줘."
-            theme={theme}
+            title="🕊 마음속에 있던 말"
+            subtitle={`그때 하지 못했던 말을
+편하게 적어보자`}
           >
             <BaseTextarea
-              value={entry.needsEmpathy}
-              onChange={(e) => updateEntry({ needsEmpathy: e.target.value })}
-              placeholder="예: 연락을 바랐는데 닿지 않아서 더 속상하고 답답했구나."
-              className={`${fieldClass(theme)} min-h-36`}
+              value={entry.message}
+              onChange={(e) => updateEntry({ message: e.target.value })}
             />
           </SectionCard>
 
-          <SectionCard title="▶ 네가 상대에게 하고 싶은 말은 뭐야?" subtitle="마음속에 남아 있는 말을 조용히 꺼내봐." theme={theme}>
-            <BaseTextarea value={entry.message} onChange={(e) => updateEntry({ message: e.target.value })} className={`${fieldClass(theme)} min-h-44`} />
+          <SectionCard
+            title="🌼 지금의 나에게"
+            subtitle="어떤 말을 해주고 싶어"
+          >
+            <BaseTextarea
+              value={entry.selfMessage}
+              onChange={(e) => updateEntry({ selfMessage: e.target.value })}
+            />
           </SectionCard>
 
           <SectionCard
-            title="▶ 너는 자신에게 어떤 말을 해주고 싶어?"
-            subtitle="공감, 지지, 응원, 칭찬… 지금의 나에게 다정한 말을 건네줘."
-            theme={theme}
+            title="🌷 지금 내가 할 수 있는 것"
+            subtitle={`바꿀 수 없는 것은 잠시 내려놓고
+지금 내가 할 수 있는 것을 찾아보자`}
           >
-            <BaseTextarea value={entry.selfMessage} onChange={(e) => updateEntry({ selfMessage: e.target.value })} className={`${fieldClass(theme)} min-h-44`} />
-          </SectionCard>
-
-          <SectionCard title="▶ 내가 해볼 수 있는 건 무엇일까?" subtitle="할 수 있는 것과, 지금은 내 힘으로 어려운 것을 나눠 적어봐." theme={theme}>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <div className="space-y-2">
-                <div className={`text-sm ${mutedClass(theme)}`}>할 수 있는 것</div>
-                <BaseTextarea value={entry.canDo} onChange={(e) => updateEntry({ canDo: e.target.value })} className={`${fieldClass(theme)} min-h-44`} />
-              </div>
-              <div className="space-y-2">
-                <div className={`text-sm ${mutedClass(theme)}`}>할 수 없는 것</div>
-                <BaseTextarea value={entry.cannotDo} onChange={(e) => updateEntry({ cannotDo: e.target.value })} className={`${fieldClass(theme)} min-h-44`} />
-              </div>
-            </div>
-          </SectionCard>
-
-          <SectionCard title="▶ 지금은 마음이 어때?" subtitle="조금 달라진 감정이 있다면 골라봐." theme={theme}>
-            <div className="space-y-3">
-              {POSITIVE_GROUPS.map((group) => (
-                <CollapsibleGroup
-                  key={group.key}
-                  title={group.title}
-                  items={group.items}
-                  selected={entry.positive}
-                  onToggle={(item) => updateEntry({ positive: toggleInList(entry.positive, item) })}
-                  theme={theme}
+            <div className="two-col">
+              <div className="stack">
+                <div className="label-text">할 수 없는 것</div>
+                <BaseTextarea
+                  value={entry.cannotDo}
+                  onChange={(e) => updateEntry({ cannotDo: e.target.value })}
                 />
-              ))}
+              </div>
+
+              <div className="stack">
+                <div className="label-text">할 수 있는 것</div>
+                <BaseTextarea
+                  value={entry.canDo}
+                  onChange={(e) => updateEntry({ canDo: e.target.value })}
+                />
+              </div>
             </div>
           </SectionCard>
 
-          <div className="sticky bottom-4 z-20">
+          <SectionCard
+            title="🌙 지금 마음은 어때"
+            subtitle="조금 달라진 마음이 있을까"
+          >
+            <div className="stack">
+{POSITIVE_GROUPS.map((group) => (
+  <CollapsibleGroup
+    key={group.key}
+    title={group.title}
+    items={group.items}
+    selected={entry.positive}
+    onToggle={(item) =>
+      updateEntry({ positive: toggleInList(entry.positive, item) })
+    }
+    open={openPositiveGroup === group.key}
+    onToggleOpen={() =>
+      setOpenPositiveGroup((prev) => (prev === group.key ? "" : group.key))
+    }
+  />
+))}
+            </div>
+          </SectionCard>
+
+          <div className="sticky-save">
             <BaseButton
+              className={`save-btn ${isSaving ? "saving" : ""}`}
               onClick={() => {
                 setIsSaving(true);
-                const updatedEntry = { ...entry, updatedAt: new Date().toISOString() };
+                const updatedEntry = {
+                  ...entry,
+                  updatedAt: new Date().toISOString(),
+                };
+
                 setRecords((old) => {
                   const currentDay = old[updatedEntry.date] || [];
                   const exists = currentDay.some((e) => e.id === selectedEntryId);
+
                   const nextDay = exists
-                    ? currentDay.map((e) => (e.id === selectedEntryId ? updatedEntry : e))
+                    ? currentDay.map((e) =>
+                        e.id === selectedEntryId ? updatedEntry : e
+                      )
                     : [...currentDay, updatedEntry];
+
                   const next = { ...old, [updatedEntry.date]: nextDay };
                   saveRecords(next);
                   return next;
                 });
-                setSavedMessage("포근하게 저장해뒀어");
+
+                setSavedMessage("저장하였습니다");
                 setTimeout(() => {
                   setSavedMessage("");
                   setIsSaving(false);
                 }, 1200);
               }}
-              className={`w-full h-12 bg-slate-900 text-base text-white shadow-lg ${isSaving ? "scale-[0.98] opacity-90" : "scale-100"}`}
             >
-              <Check className="mr-2 h-4 w-4" />{isSaving ? "저장 중..." : "저장하기"}
+              <Check size={16} />
+              {isSaving ? "저장 중..." : "저장"}
             </BaseButton>
           </div>
         </div>
