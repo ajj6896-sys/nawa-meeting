@@ -1,5 +1,5 @@
 {
-  "name": "nawa-meeting",
+  "name": "nawa-prayer-talk",
   "private": true,
   "version": "0.0.1",
   "type": "module",
@@ -15,9 +15,6 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.1",
-    "autoprefixer": "^10.4.20",
-    "postcss": "^8.4.49",
-    "tailwindcss": "^3.4.13",
     "vite": "^5.4.2"
   }
 }
