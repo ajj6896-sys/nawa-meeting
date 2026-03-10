@@ -964,9 +964,6 @@ ${targetEntry.cannotDo || ""}
 할 수 있는 것:
 ${targetEntry.canDo || ""}
 
-기도:
-${targetEntry.prayer || ""}
-
 지금 마음은 어때:
 ${(targetEntry.positive || []).join(", ") || ""}`;
 
