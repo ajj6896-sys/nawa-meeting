@@ -670,6 +670,7 @@ ${(targetEntry.positive || []).join(", ") || ""}`;
         </div>
 
         <div className="min-w-0 space-y-5 pb-24 md:pb-6">
+          <InfoCards theme={theme} />
           <SectionCard title="▶ 오늘의 기록 제목" subtitle="하루에 여러 번 적을 수도 있으니까, 나중에 보기 편한 이름을 붙여줘." theme={theme}>
             <BaseInput
               value={entry.title}
