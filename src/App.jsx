@@ -820,12 +820,6 @@ export default function App() {
   const [openPositiveGroup, setOpenPositiveGroup] = useState("gratitude");
   const [openNeedGroup, setOpenNeedGroup] = useState("");
   const dayEntries = useMemo(() => records[currentDate] || [], [records, currentDate]);
-const selectedNeeds = [
-  ...(entry.needs || []),
-  ...(entry.needsOtherChecked && entry.needsOtherText?.trim()
-    ? [entry.needsOtherText.trim()]
-    : []),
-].join(" · ");
 
   useEffect(() => {
     localStorage.setItem(THEME_KEY, theme);
