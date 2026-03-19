@@ -830,10 +830,13 @@ export default function App() {
   }, [theme]);
 
   useEffect(() => {
-    saveUi({ currentDate, selectedEntryId });
-    setMonthCursor(parseYmd(currentDate));
-  }, [currentDate, selectedEntryId]);
+  saveUi({ currentDate, selectedEntryId });
+}, [currentDate, selectedEntryId]);
 
+useEffect(() => {
+  setMonthCursor(parseYmd(currentDate));
+}, [currentDate]);
+  
   useEffect(() => {
     const entries = records[currentDate] || [];
 
@@ -907,6 +910,9 @@ export default function App() {
   };
 
   const deleteEntry = (id) => {
+    const ok = window.confirm("이 기록을 삭제할까?");
+    if (!ok) return;
+    
     const day = records[currentDate] || [];
     const nextDay = day.filter((e) => e.id !== id);
     const nextRecords = { ...records, [currentDate]: nextDay };
