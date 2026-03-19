@@ -1392,12 +1392,12 @@ ${(targetEntry.positive || []).join(", ") || ""}`;
           </SectionCard>
 
           <SectionCard
-  title="▶️ 그럼, 그 사람이 해주길 바랐던 말은 어떤 걸까?"
+  title="💌 그럼, 그 사람이 해주길 바랐던 말은 어떤 걸까?"
 subtitle={`그때 듣고 싶었던 말을
-지금의 내가 나에게 건네보자
+지금의 내가 나에게 건네보자 🌿
 
 대상이 나 자신이라면
-이 부분은 살짝 넘어가도 괜찮아`}
+이 부분은 살짝 넘어가도 괜찮아 ☁️`}
 >
             <BaseTextarea
     value={entry.replyFromOther}
