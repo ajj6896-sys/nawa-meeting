@@ -1323,11 +1323,13 @@ ${(targetEntry.positive || []).join(", ") || ""}`;
                   <span>직접 적기</span>
                 </label>
 
-                <BaseInput
-                  value={entry.needsOtherText}
-                  onChange={(e) => updateEntry({ needsOtherText: e.target.value })}
-                  placeholder="떠오르는 마음을 적어보자"
-                />
+                {entry.needsOtherChecked ? (
+  <BaseInput
+    value={entry.needsOtherText}
+    onChange={(e) => updateEntry({ needsOtherText: e.target.value })}
+    placeholder="떠오르는 마음을 적어보자"
+  />
+) : null}
               </div>
             </div>
           </SectionCard>
