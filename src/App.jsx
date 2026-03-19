@@ -474,7 +474,6 @@ function appThemeClass(theme) {
 
 function BaseButton({ children, className = "", type = "button", onClick }) {
   return (
-    
     <button type={type} onClick={onClick} className={`btn ${className}`}>
       {children}
     </button>
@@ -811,21 +810,12 @@ export default function App() {
   );
   const saveTimer = useRef(null);
   const [showEmotionSummary, setShowEmotionSummary] = useState(false);
-  const [showNeedsSummary, setShowNeedsSummary] = useState(false);
   const [showEmpathyEmotionSummary, setShowEmpathyEmotionSummary] = useState(false);
   const [showNeedsSummaryBox, setShowNeedsSummaryBox] = useState(false);
   const [openEmotionGroup, setOpenEmotionGroup] = useState("fear");
   const [openPositiveGroup, setOpenPositiveGroup] = useState("gratitude");
   const [openNeedGroup, setOpenNeedGroup] = useState("");
   const dayEntries = useMemo(() => records[currentDate] || [], [records, currentDate]);
-  const selectedEmotions = entry.negative?.join(" · ") || "";
-
-const selectedNeeds = [
-  ...(entry.needs || []),
-  ...(entry.needsOtherChecked && entry.needsOtherText?.trim()
-    ? [entry.needsOtherText.trim()]
-    : []),
-].join(" · ");
 
   useEffect(() => {
     localStorage.setItem(THEME_KEY, theme);
@@ -892,7 +882,7 @@ const selectedNeeds = [
     return () => {
       if (saveTimer.current) clearTimeout(saveTimer.current);
     };
-  }, [entry, selectedEntryId, records]);
+  }, [entry, selectedEntryId]);
 
   const updateEntry = (patch) =>
     setEntry((prev) => ({
@@ -953,6 +943,9 @@ ${targetEntry.message || ""}
 
 지금의 나에게 어떤 말을 해주고 싶어:
 ${targetEntry.selfMessage || ""}
+
+상대에게 듣고 싶었던 말:
+${targetEntry.replyFromOther || ""}
 
 할 수 없는 것:
 ${targetEntry.cannotDo || ""}
