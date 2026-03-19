@@ -1343,10 +1343,7 @@ ${(targetEntry.positive || []).join(", ") || ""}`;
 
 <SectionCard
   title="🍃 그렇구나"
-  subtitle={`바랐던 것이 채워지지 않아서 속상했겠구나
-
-예: 친구가 연락을 해주기를 바랐는데
-그렇지 않아서 서운했구나`}
+  subtitle={`바랐던 것이 채워지지 않아서 속상했겠구나`}
 >
   {(entry.needs?.length > 0 || entry.needsOtherText?.trim()) && (
     <div className="summary-chip-box">
@@ -1385,10 +1382,11 @@ ${(targetEntry.positive || []).join(", ") || ""}`;
   )}
 
   <BaseTextarea
-    value={entry.needsEmpathy}
-    onChange={(e) => updateEntry({ needsEmpathy: e.target.value })}
-    placeholder="그 마음을 다정하게 바라봐주자"
-  />
+  value={entry.needsEmpathy}
+  onChange={(e) => updateEntry({ needsEmpathy: e.target.value })}
+  placeholder={`예: 친구가 연락을 해주기를 바랐는데
+그렇지 않아서 서운했구나`}
+/>
 </SectionCard>
 
           <SectionCard
@@ -1404,7 +1402,7 @@ ${(targetEntry.positive || []).join(", ") || ""}`;
           <SectionCard
   title="💌 그럼, 그 사람이 해주길 바랐던 말은 어떤 걸까?"
 subtitle={`그때 듣고 싶었던 말을
-지금의 내가 나에게 건네보자 🌿
+지금의 내가 내 마음에 건네보자 🌿
 
 대상이 나 자신이라면
 이 부분은 살짝 넘어가도 괜찮아 ☁️`}
@@ -1412,7 +1410,8 @@ subtitle={`그때 듣고 싶었던 말을
             <BaseTextarea
     value={entry.replyFromOther}
     onChange={(e) => updateEntry({ replyFromOther: e.target.value })}
-    placeholder="예: 괜찮아, 네 마음 이해해. 네 잘못만은 아니야."
+    placeholder="예: 괜찮아, 네 마음 이해해. 
+              네 잘못만은 아니야."
   />
           </SectionCard>
           <SectionCard
@@ -1421,7 +1420,7 @@ subtitle={`그때 듣고 싶었던 말을
 지금의 내가 조용히 건네보자 🌿
 
 완벽하지 않아도 괜찮아
-지금의 나에게 하고픈 말을 적어보자`}
+지금의 나에게 해주고 싶은 말을 적어보자`}
           >
             <BaseTextarea
               value={entry.selfMessage}
@@ -1455,7 +1454,7 @@ subtitle={`그때 듣고 싶었던 말을
 
           <SectionCard
             title="🌙 지금 마음은 어때?"
-            subtitle="조금 달라진 마음이 있다면 가만히 느껴보자"
+            subtitle="조금 달라진 마음이 있다면 천천히 살펴보자"
           >
             <div className="stack">
 {POSITIVE_GROUPS.map((group) => (
