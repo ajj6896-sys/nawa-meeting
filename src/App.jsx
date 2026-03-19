@@ -403,6 +403,7 @@ const emptyEntry = (date = todayString()) => ({
   needsOtherText: "",
   needsEmpathy: "",
   message: "",
+  replyFromOther: "",
   selfMessage: "",
   canDo: "",
   cannotDo: "",
@@ -1390,6 +1391,17 @@ ${(targetEntry.positive || []).join(", ") || ""}`;
             />
           </SectionCard>
 
+          <SectionCard
+  title="▶️ 그래 그럼 네가 그 상대에게 듣고 싶은 말은?"
+  subtitle={`상대가 해주길 바랐던 말을 적어보자
+대상이 나 자신이라면 생략해도 괜찮아`}
+>
+            <BaseTextarea
+    value={entry.replyFromOther}
+    onChange={(e) => updateEntry({ replyFromOther: e.target.value })}
+    placeholder="예: 괜찮아, 네 마음 이해해. 네 잘못만은 아니야."
+  />
+          </SectionCard>
           <SectionCard
             title="🌼 지금의 나에게"
             subtitle="어떤 말을 해주고 싶어?"
