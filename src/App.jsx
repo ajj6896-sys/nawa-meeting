@@ -1189,7 +1189,7 @@ ${(targetEntry.positive || []).join(", ") || ""}`;
 
           <SectionCard
             title="💭 지금 마음이 어때?"
-            subtitle="지금 느껴지는 감정을 골라보자"
+            subtitle="지금 느껴지는 감정에 작은 이름을 붙여보자"
           >
             <div className="stack">
               {NEGATIVE_GROUPS.map((group) => (
@@ -1212,7 +1212,7 @@ ${(targetEntry.positive || []).join(", ") || ""}`;
           
 <SectionCard
   title="🌿 어떤 일이 있었을까?"
-  subtitle={`내 마음이 이렇게 느낀 이유를 천천히 적어보자`}
+  subtitle={`이 마음이 들게 된 일을 천천히 떠올려보자`}
 >
   {entry.negative?.length > 0 && (
     <div className="summary-chip-box">
@@ -1253,7 +1253,7 @@ ${(targetEntry.positive || []).join(", ") || ""}`;
 <SectionCard
   title="🤍 그래서 그런 마음이 들었구나"
   subtitle={`그럴 수 있어
-그 상황이라면 누구라도 그렇게 느낄 수 있어
+그 상황이라면 그런 마음이 드는 것도 자연스러워
 
 예: 친구가 연락이 안 되어서
 괜히 마음이 쓰이고 걱정이 되었구나`}
@@ -1296,7 +1296,7 @@ ${(targetEntry.positive || []).join(", ") || ""}`;
 
           <SectionCard
             title="🌱 마음속에서는 무엇을 바랐을까?"
-            subtitle={`그 순간 내 마음은 무엇을 바라보고 있었을까?`}
+            subtitle={`그 순간 마음속에서는 무엇을 바라고 있었을까?`}
           >
             <div className="stack">
 {NEED_GROUPS.map((group) => (
@@ -1343,7 +1343,7 @@ ${(targetEntry.positive || []).join(", ") || ""}`;
 
 <SectionCard
   title="🍃 그렇구나"
-  subtitle={`그 마음이 채워지지 않아서 속상했겠구나
+  subtitle={`바랐던 것이 채워지지 않아서 속상했겠구나
 
 예: 친구가 연락을 해주기를 바랐는데
 그렇지 않아서 서운했구나`}
@@ -1393,7 +1393,7 @@ ${(targetEntry.positive || []).join(", ") || ""}`;
 
           <SectionCard
             title="🕊 마음속에 있던 말"
-            subtitle={`그때 상대에게 하지 못했던 말을 편하게 적어보자`}
+            subtitle={`그때 하지 못했던 말을 편하게 적어보자`}
           >
             <BaseTextarea
               value={entry.message}
@@ -1432,7 +1432,7 @@ subtitle={`그때 듣고 싶었던 말을
           <SectionCard
             title="🌷 지금 내가 할 수 있는 것"
             subtitle={`바꿀 수 없는 것은 잠시 내려놓고
-지금 내가 할 수 있는 것을 찾아보자`}
+지금 내가 할 수 있는 것을 하나씩 찾아보자`}
           >
             <div className="two-col">
               <div className="stack">
@@ -1455,7 +1455,7 @@ subtitle={`그때 듣고 싶었던 말을
 
           <SectionCard
             title="🌙 지금 마음은 어때?"
-            subtitle="조금 달라진 마음이 있어?"
+            subtitle="조금 달라진 마음이 있다면 가만히 느껴보자"
           >
             <div className="stack">
 {POSITIVE_GROUPS.map((group) => (
