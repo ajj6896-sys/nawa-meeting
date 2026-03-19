@@ -1253,10 +1253,7 @@ ${(targetEntry.positive || []).join(", ") || ""}`;
 <SectionCard
   title="🤍 그래서 그런 마음이 들었구나"
   subtitle={`그럴 수 있어
-그 상황이라면 그런 마음이 드는 것도 자연스러워
-
-예: 친구가 연락이 안 되어서
-괜히 마음이 쓰이고 걱정이 되었구나`}
+그 상황이라면 그런 마음이 드는 것도 자연스러워`}
 >
   {entry.negative?.length > 0 && (
     <div className="summary-chip-box">
@@ -1291,6 +1288,8 @@ ${(targetEntry.positive || []).join(", ") || ""}`;
   <BaseTextarea
     value={entry.empathy}
     onChange={(e) => updateEntry({ empathy: e.target.value })}
+    placeholder={`예: 친구가 연락을 해주기를 바랐는데
+그렇지 않아서 서운했구나`}
   />
 </SectionCard> 
 
