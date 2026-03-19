@@ -1317,6 +1317,7 @@ ${(targetEntry.positive || []).join(", ") || ""}`;
                     onChange={() =>
                       updateEntry({
                         needsOtherChecked: !entry.needsOtherChecked,
+                        needsOtherText: entry.needsOtherChecked ? "" : entry.needsOtherText,
                       })
                     }
                   />
