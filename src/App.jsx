@@ -955,11 +955,11 @@ ${targetEntry.needsEmpathy || ""}
 마음속에 있던 말:
 ${targetEntry.message || ""}
 
-지금의 나에게 어떤 말을 해주고 싶어:
-${targetEntry.selfMessage || ""}
-
 상대에게 듣고 싶었던 말:
 ${targetEntry.replyFromOther || ""}
+
+지금의 나에게 어떤 말을 해주고 싶어:
+${targetEntry.selfMessage || ""}
 
 할 수 없는 것:
 ${targetEntry.cannotDo || ""}
