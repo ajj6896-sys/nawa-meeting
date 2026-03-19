@@ -1383,7 +1383,7 @@ ${(targetEntry.positive || []).join(", ") || ""}`;
 
           <SectionCard
             title="🕊 마음속에 있던 말"
-            subtitle={`그때 하지 못했던 말을 편하게 적어보자`}
+            subtitle={`그때 상대에게 하지 못했던 말을 편하게 적어보자`}
           >
             <BaseTextarea
               value={entry.message}
